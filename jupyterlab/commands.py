@@ -1241,7 +1241,7 @@ class _AppHandler(object):
         local = self.info['local_extensions']
         linked = self.info['linked_packages']
         extensions = self.info['extensions']
-        shadowed_ext = []   #self.info['shadowed_exts']
+        shadowed_exts = self.info['shadowed_exts']
         jlab = data['jupyterlab']
 
         def format_path(path):
