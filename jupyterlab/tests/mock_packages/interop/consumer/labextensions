@@ -1,0 +1,17 @@
+JupyterLab v3.0.0rc13
+/Users/silvester/miniconda/envs/jlab-master/share/jupyter/labextensions
+        @jupyterlab/mock-provider v3.0.0-rc.13 [32menabled[0m [32mOK[0m
+
+Other labextensions (built into JupyterLab)
+   app dir: /Users/silvester/miniconda/envs/jlab-master/share/jupyter/lab
+        @jupyterlab/mock-consumer v3.0.0-rc.13 [32menabled[0m [32mOK[0m*
+
+
+   local extensions:
+        @jupyterlab/mock-consumer: /Users/silvester/workspace/jupyter/jlab-master/jupyterlab/tests/mock_packages/interop/consumer
+
+   linked packages:
+        @jupyterlab/mock-token: /Users/silvester/workspace/jupyter/jlab-master/jupyterlab/tests/mock_packages/interop/token
+
+Disabled extensions:
+    @jupyterlab/mock-extension
