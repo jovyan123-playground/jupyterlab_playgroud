@@ -327,6 +327,8 @@ if [[ $GROUP == usage ]]; then
 fi
 
 if [[ $GROUP == interop ]]; then
+    cd jupyterlab/tests/mock_packages
+
     # Install a source extension that depends on a prebuilt extension
     pushd token
     jupyter labextension link . --no-build
@@ -364,20 +366,29 @@ if [[ $GROUP == interop ]]; then
     cat labextensions | grep -q "@jupyterlab/mock-provider.*OK"
     python -m jupyterlab.browser_check
 
-    # Install the mock consumer as a source extension as well
-    # To test handling of both
+    # Clear install
+    pip uninstall -y jlab_mock_consumer
+    jupyter lab clean --all
+
+    # Install the mock consumer as a source extension and as a
+    # prebuilt extension to test shadowing
+    pushd token
+    jupyter labextension link . --no-build
+    popd
+    pushd provider
+    jupyter labextension install . --no-build
+    popd
     pushd consumer
+    # Need to install source first because it would get ignored
+    # if installed after
     jupyter labextension install .
+    jupyter labextension build .
+    pip install .
     popd
     jupyter labextension list 1>labextensions 2>&1
     cat labextensions | grep -q "@jupyterlab/mock-consumer.*OK"
     cat labextensions | grep -q "@jupyterlab/mock-provider.*OK"
     python -m jupyterlab.browser_check
-
-    # Clear install
-    pip uninstall -y jlab_mock_consumer
-    jupyter lab clean --all
-
 fi
 
 if [[ $GROUP == nonode ]]; then
