@@ -327,7 +327,7 @@ if [[ $GROUP == usage ]]; then
 fi
 
 if [[ $GROUP == interop ]]; then
-    cd jupyterlab/tests/mock_packages
+    cd jupyterlab/tests/mock_packages/interop
 
     # Install a source extension that depends on a prebuilt extension
     pushd token
