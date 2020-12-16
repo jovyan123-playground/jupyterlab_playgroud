@@ -5,6 +5,8 @@ import { JSONExt } from '@lumino/coreutils';
 
 import minimist from 'minimist';
 
+import micromatch from 'micromatch';
+
 import { URLExt } from './url';
 
 /**
@@ -306,7 +308,7 @@ export namespace PageConfig {
      * @param id - The plugin ID.
      */
     export function isDeferred(id: string): boolean {
-      return deferred.some(val => val.raw === id || val.rule.test(id));
+      return deferred.some(val => micromatch.isMatch(id, val.raw));
     }
 
     /**
@@ -315,7 +317,7 @@ export namespace PageConfig {
      * @param id - The plugin ID.
      */
     export function isDisabled(id: string): boolean {
-      return disabled.some(val => val.raw === id || val.rule.test(id));
+      return disabled.some(val => micromatch.isMatch(id, val.raw));
     }
   }
 }
