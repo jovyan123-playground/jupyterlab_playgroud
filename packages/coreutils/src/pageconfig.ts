@@ -278,12 +278,15 @@ export namespace PageConfig {
      * #### Notes
      * This is intended for `deferredExtensions` and `disabledExtensions`.
      */
-    function populate(key: string): { raw: string; rule: RegExp }[] {
+    function populate(key: string): string[] {
       try {
         const raw = getOption(key);
         if (raw) {
           return JSON.parse(raw).map((pattern: string) => {
-            return { raw: pattern, rule: new RegExp(pattern) };
+            if (pattern.indexOf(':') === -1) {
+              pattern += ':*';
+            }
+            return pattern;
           });
         }
       } catch (error) {
@@ -308,7 +311,7 @@ export namespace PageConfig {
      * @param id - The plugin ID.
      */
     export function isDeferred(id: string): boolean {
-      return deferred.some(val => micromatch.isMatch(id, val.raw));
+      return deferred.some(val => micromatch.isMatch(id, val));
     }
 
     /**
@@ -317,7 +320,7 @@ export namespace PageConfig {
      * @param id - The plugin ID.
      */
     export function isDisabled(id: string): boolean {
-      return disabled.some(val => micromatch.isMatch(id, val.raw));
+      return disabled.some(val => micromatch.isMatch(id, val));
     }
   }
 }
