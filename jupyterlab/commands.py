@@ -732,7 +732,7 @@ class _AppHandler(object):
 
         all_exts = list(info['federated_extensions']) + list(info['extensions']) + list(info['core_extensions'])
         # Ignore disabled extensions that are not installed
-        disabled = [i for i in info['disabled'] if i.partition[':'][0] in all_exts]
+        disabled = [i for i in info['disabled'] if i.partition(':')[0] in all_exts]
         if disabled:
             logger.info('\nDisabled extensions:')
             for item in sorted(disabled):
