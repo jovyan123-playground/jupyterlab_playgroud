@@ -327,7 +327,7 @@ export namespace PageConfig {
       if (separatorIndex !== -1) {
         extName = id.slice(0, separatorIndex);
       }
-      return deferred.some(val => val === id || (extName && val === extName));
+      return disabled.some(val => val === id || (extName && val === extName));
     }
   }
 }
