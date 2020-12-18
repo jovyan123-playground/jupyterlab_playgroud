@@ -737,8 +737,6 @@ class _AppHandler(object):
             logger.info('\nDisabled extensions:')
             for item in sorted(disabled):
                 # Show that all plugins will be disabled if the whole extension matches
-                # Do not show a ":*" since the user wouldn't be able to re-enable 
-                # using that string
                 if item in all_exts:
                     item += ' (all plugins)'
                 logger.info('    %s' % item)

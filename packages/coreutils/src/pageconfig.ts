@@ -5,8 +5,6 @@ import { JSONExt } from '@lumino/coreutils';
 
 import minimist from 'minimist';
 
-import micromatch from 'micromatch';
-
 import { URLExt } from './url';
 
 /**
@@ -282,12 +280,7 @@ export namespace PageConfig {
       try {
         const raw = getOption(key);
         if (raw) {
-          return JSON.parse(raw).map((pattern: string) => {
-            if (pattern.indexOf(':') === -1) {
-              pattern += ':*';
-            }
-            return pattern;
-          });
+          return JSON.parse(raw);
         }
       } catch (error) {
         console.warn(`Unable to parse ${key}.`, error);
@@ -311,7 +304,14 @@ export namespace PageConfig {
      * @param id - The plugin ID.
      */
     export function isDeferred(id: string): boolean {
-      return deferred.some(val => micromatch.isMatch(id, val));
+      // Check for either a full plugin id match or an extension
+      // name match.
+      const separatorIndex = id.indexOf(':');
+      let extName = '';
+      if (separatorIndex !== -1) {
+        extName = id.slice(0, separatorIndex);
+      }
+      return deferred.some(val => val === id || (extName && val === extName));
     }
 
     /**
@@ -320,7 +320,14 @@ export namespace PageConfig {
      * @param id - The plugin ID.
      */
     export function isDisabled(id: string): boolean {
-      return disabled.some(val => micromatch.isMatch(id, val));
+      // Check for either a full plugin id match or an extension
+      // name match.
+      const separatorIndex = id.indexOf(':');
+      let extName = '';
+      if (separatorIndex !== -1) {
+        extName = id.slice(0, separatorIndex);
+      }
+      return deferred.some(val => val === id || (extName && val === extName));
     }
   }
 }
