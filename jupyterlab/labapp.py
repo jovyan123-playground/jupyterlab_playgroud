@@ -546,9 +546,8 @@ class LabApp(NBClassicConfigShimMixin, LabServerApp):
     expose_app_in_browser = Bool(False, config=True,
         help="Whether to expose the global app instance to browser via window.jupyterlab")
 
-    # By default, open a browser for JupyterLab
+    # No overrides needed for server config
     serverapp_config = {
-        "open_browser": True
     }
 
     @default('app_dir')
