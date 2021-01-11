@@ -310,8 +310,10 @@ if [[ $GROUP == usage ]]; then
 
     # Check the labhubapp
     ./test_install/bin/pip install jupyterhub
-    ./test_install/bin/jupyter-labhub --no-browser &
+    export JUPYTERHUB_API_TOKEN="aa"
+    ./test_install/bin/jupyter-labhub --HubOAuth.oauth_client_id="foo" &
     TASK_PID=$!
+    unset JUPYTERHUB_API_TOKEN
     # Make sure the task is running
     ps -p $TASK_PID || exit 1
     sleep 5
