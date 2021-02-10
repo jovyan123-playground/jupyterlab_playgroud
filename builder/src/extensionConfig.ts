@@ -235,6 +235,11 @@ function generateConfig({
     );
   }
 
+  let filename = '[name].[contenthash].js';
+  if (mode === 'production') {
+    filename += '?v=[contenthash]';
+  }
+
   const config = [
     merge(
       baseConfig,
@@ -243,7 +248,7 @@ function generateConfig({
         devtool,
         entry: {},
         output: {
-          filename: '[name].[contenthash].js',
+          filename,
           path: staticPath,
           publicPath: staticUrl || 'auto'
         },

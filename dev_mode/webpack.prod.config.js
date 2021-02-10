@@ -6,6 +6,9 @@ const LicenseWebpackPlugin = require('license-webpack-plugin')
 config[0] = merge(config[0], {
   mode: 'production',
   devtool: 'source-map',
+  output: {
+    filename: '[name].[contenthash].js?v=[contenthash]'
+  },
   optimization: {
     minimize: false
   },
