@@ -6,6 +6,9 @@
 set -ex
 set -o pipefail
 
+
+export START_TIME=$(date +%s)
+
 if [[ $GROUP != nonode ]]; then
     python -c "from jupyterlab.commands import build_check; build_check()"
 fi
@@ -100,28 +103,30 @@ fi
 if [[ $GROUP == integrity2 ]]; then
     # Run the integrity script to link binary files
     jlpm integrity
+    echo "elapsed" $(($(date +%s) - ${START_TIME}))
 
     # Build the packages individually.
     jlpm run build:src
+    echo "elapsed" $(($(date +%s) - ${START_TIME}))
 
     # Make sure we can build for release
     jlpm run build:dev:prod:release
-
+    echo "elapsed" $(($(date +%s) - ${START_TIME}))
     # Make sure the storybooks build.
     jlpm run build:storybook
-
+    echo "elapsed" $(($(date +%s) - ${START_TIME}))
     # Make sure we have CSS that can be converted with postcss
     jlpm global add postcss postcss-cli
-
+    echo "elapsed" $(($(date +%s) - ${START_TIME}))
     jlpm config set prefix ~/.yarn
     ~/.yarn/bin/postcss packages/**/style/*.css --dir /tmp
-
+    echo "elapsed" $(($(date +%s) - ${START_TIME}))
     # run twine check on the python build assets.
     # this must be done before altering any versions below.
     python -m pip install -U twine wheel build
     python -m build .
     twine check dist/*
-
+    echo "elapsed" $(($(date +%s) - ${START_TIME}))
     # Make sure we can bump the version
     # This must be done at the end so as not to interfere
     # with the other checks
@@ -137,18 +142,19 @@ if [[ $GROUP == integrity2 ]]; then
     jlpm bumpversion build --force
     VERSION=$(python setup.py --version)
     if [[ $VERSION != *rc1 ]]; then exit 1; fi
-
+    echo "elapsed" $(($(date +%s) - ${START_TIME}))
     # make sure we can patch release
     jlpm bumpversion release --force  # switch to final
     jlpm patch:release --force
-
+    echo "elapsed" $(($(date +%s) - ${START_TIME}))
     # make sure we can bump major JS releases
     jlpm bumpversion minor --force
     jlpm bump:js:major console --force
     jlpm bump:js:major console notebook --force
-
+    echo "elapsed" $(($(date +%s) - ${START_TIME}))
     # Make sure that a prepublish would include the proper files.
     jlpm run prepublish:check
+    echo "elapsed" $(($(date +%s) - ${START_TIME}))
 fi
 
 
@@ -168,7 +174,7 @@ fi
 if [[ $GROUP == usage ]]; then
     # Run the integrity script to link binary files
     jlpm integrity
-
+    echo "elapsed" $(($(date +%s) - ${START_TIME}))
     # Test the cli apps.
     jupyter lab clean --debug
     jupyter lab build --debug
@@ -178,14 +184,14 @@ if [[ $GROUP == usage ]]; then
     jupyter labextension unlink mimeextension --no-build --debug
     jupyter labextension link mimeextension --no-build --debug
     jupyter labextension unlink  @jupyterlab/mock-mime-extension --no-build --debug
-
+    echo "elapsed" $(($(date +%s) - ${START_TIME}))
     # Test with a source package install
     jupyter labextension install mimeextension  --no-build --debug
     jupyter labextension list --debug
     jupyter labextension disable @jupyterlab/mock-mime-extension --debug
     jupyter labextension enable @jupyterlab/mock-mime-extension --debug
     jupyter labextension uninstall @jupyterlab/mock-mime-extension --no-build --debug
-
+    echo "elapsed" $(($(date +%s) - ${START_TIME}))
     # Test enable/disable and uninstall/install a core package
     jupyter labextension disable @jupyterlab/notebook-extension --debug
     jupyter labextension uninstall @jupyterlab/notebook-extension --no-build --debug
@@ -193,16 +199,16 @@ if [[ $GROUP == usage ]]; then
     cat labextensions | grep "Uninstalled core extensions:"
     jupyter labextension install @jupyterlab/notebook-extension --no-build --debug
     jupyter labextension enable @jupyterlab/notebook-extension --debug
-
+    echo "elapsed" $(($(date +%s) - ${START_TIME}))
     # Test with a prebuilt install
     jupyter labextension develop extension --debug
     jupyter labextension build extension
-
+    echo "elapsed" $(($(date +%s) - ${START_TIME}))
     # Test develop script with hyphens and underscores in the module name
     jupyter labextension develop test-hyphens --overwrite --debug
     jupyter labextension develop test_no_hyphens --overwrite --debug
     jupyter labextension develop test-hyphens-underscore --overwrite --debug
-
+    echo "elapsed" $(($(date +%s) - ${START_TIME}))
     python -m jupyterlab.browser_check
     jupyter labextension list 1>labextensions 2>&1
     cat labextensions | grep "@jupyterlab/mock-extension.*enabled.*OK"
@@ -216,12 +222,12 @@ if [[ $GROUP == usage ]]; then
     # build it again without a static-url to avoid causing errors
     jupyter labextension build extension
     popd
-
+    echo "elapsed" $(($(date +%s) - ${START_TIME}))
     jupyter lab workspaces export > workspace.json --debug
     jupyter lab workspaces import --name newspace workspace.json --debug
     jupyter lab workspaces export newspace > newspace.json --debug
     rm workspace.json newspace.json
-
+    echo "elapsed" $(($(date +%s) - ${START_TIME}))
     # Make sure we can call help on all the cli apps.
     jupyter lab -h
     jupyter lab build -h
@@ -234,10 +240,10 @@ if [[ $GROUP == usage ]]; then
     jupyter labextension list -h
     jupyter labextension enable -h
     jupyter labextension disable -h
-
+    echo "elapsed" $(($(date +%s) - ${START_TIME}))
     # Make sure we can run JupyterLab under classic notebook
     python -m jupyterlab.browser_check --notebook
-
+    echo "elapsed" $(($(date +%s) - ${START_TIME}))
     # Make sure we can add and remove a sibling package.
     # jlpm run add:sibling jupyterlab/tests/mock_packages/extension
     # jlpm run build
@@ -252,11 +258,11 @@ if [[ $GROUP == usage ]]; then
     jlpm run get:dependency @jupyterlab/buildutils
     jlpm run get:dependency typescript
     jlpm run get:dependency react-native
-
+    echo "elapsed" $(($(date +%s) - ${START_TIME}))
     # Use the extension upgrade script
     pip install cookiecutter
     python -m jupyterlab.upgrade_extension --no-input jupyterlab/tests/mock_packages/extension
-
+    echo "elapsed" $(($(date +%s) - ${START_TIME}))
     # Test theme creation - make sure we can add it as a package, build,
     # and run browser
     pip install -q pexpect
@@ -268,7 +274,7 @@ if [[ $GROUP == usage ]]; then
     python -m jupyterlab.browser_check --dev-mode
     jlpm run remove:package foo
     jlpm run integrity
-
+    echo "elapsed" $(($(date +%s) - ${START_TIME}))
     ## Test app directory support being a symlink
     mkdir tmp
     pushd tmp
@@ -277,24 +283,24 @@ if [[ $GROUP == usage ]]; then
     # verify that app directory is resolved
     env JUPYTERLAB_DIR=./link_app_dir jupyter lab path | grep real_app_dir
     popd
-
+    echo "elapsed" $(($(date +%s) - ${START_TIME}))
     # Make sure we can successfully load the dev app.
     python -m jupyterlab.browser_check --dev-mode
-
+    echo "elapsed" $(($(date +%s) - ${START_TIME}))
     # Make sure core mode works
     jlpm run build:core
     # Make sure we have a final released version of JupyterLab server
     python -m jupyterlab.browser_check --core-mode
-
+    echo "elapsed" $(($(date +%s) - ${START_TIME}))
     # Make sure we can run the built app.
     jupyter labextension install ./jupyterlab/tests/mock_packages/extension --debug
     python -m jupyterlab.browser_check
     jupyter labextension list --debug
-
+    echo "elapsed" $(($(date +%s) - ${START_TIME}))
     # Make sure we can run watch mode with no built application
     jupyter lab clean
     python -m jupyterlab.browser_check --watch
-
+    echo "elapsed" $(($(date +%s) - ${START_TIME}))
     # Make sure we can non-dev install.
     virtualenv -p $(which python3) test_install
     ./test_install/bin/pip install -q ".[test]"  # this populates <sys_prefix>/share/jupyter/lab
@@ -333,13 +339,14 @@ if [[ $GROUP == usage ]]; then
     ps -p $TASK_PID || exit 1
     sleep 5
     kill $TASK_PID
-
+    echo "elapsed" $(($(date +%s) - ${START_TIME}))
     # Make sure we can clean various bits of the app dir
     jupyter lab clean
     jupyter lab clean --extensions
     jupyter lab clean --settings
     jupyter lab clean --static
     jupyter lab clean --all
+    echo "elapsed" $(($(date +%s) - ${START_TIME}))
 fi
 
 if [[ $GROUP == interop ]]; then
