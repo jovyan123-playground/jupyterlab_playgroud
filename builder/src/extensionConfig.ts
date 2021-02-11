@@ -235,6 +235,8 @@ function generateConfig({
     );
   }
 
+  // Add version argument when in production so the Jupyter server
+  // does not cache the files in the static file handler.
   let filename = '[name].[contenthash].js';
   if (mode === 'production') {
     filename += '?v=[contenthash]';
