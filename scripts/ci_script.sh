@@ -180,8 +180,11 @@ if [[ $GROUP == usage ]]; then
     jupyter labextension unlink  @jupyterlab/mock-mime-extension --no-build --debug
 
     # Test with a source package install
-    jupyter labextension install mimeextension  --no-build --debug
+    jupyter labextension install mimeextension --debug
     jupyter labextension list --debug
+    jupyter labextension list 1>labextensions 2>&1
+    cat labextensions | grep "@jupyterlab/mock-mime-extension.*enabled.*OK"
+    python -m jupyterlab.browser_check
     jupyter labextension disable @jupyterlab/mock-mime-extension --debug
     jupyter labextension enable @jupyterlab/mock-mime-extension --debug
     jupyter labextension uninstall @jupyterlab/mock-mime-extension --no-build --debug
@@ -194,15 +197,9 @@ if [[ $GROUP == usage ]]; then
     jupyter labextension install @jupyterlab/notebook-extension --no-build --debug
     jupyter labextension enable @jupyterlab/notebook-extension --debug
 
-    # Test with a prebuilt installs
+    # Test with a prebuilt install
     jupyter labextension develop extension --debug
     jupyter labextension build extension
-    jupyter labextension develop mimeextension --debug
-    jupyter labextension build mimeextension
-    jupyter labextension list 1>labextensions 2>&1
-    cat labextensions | grep "@jupyterlab/mock-extension.*enabled.*OK"
-    cat labextensions | grep "@jupyterlab/mock-mime-extension.*enabled.*OK"
-    python -m jupyterlab.browser_check
 
     # Test develop script with hyphens and underscores in the module name
     jupyter labextension develop test-hyphens --overwrite --debug
@@ -210,6 +207,8 @@ if [[ $GROUP == usage ]]; then
     jupyter labextension develop test-hyphens-underscore --overwrite --debug
 
     python -m jupyterlab.browser_check
+    jupyter labextension list 1>labextensions 2>&1
+    cat labextensions | grep "@jupyterlab/mock-extension.*enabled.*OK"
     jupyter labextension build extension --static-url /foo/
     jupyter labextension disable @jupyterlab/mock-extension --debug
     jupyter labextension enable @jupyterlab/mock-extension --debug
