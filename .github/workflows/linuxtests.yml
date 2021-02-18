@@ -16,6 +16,8 @@ jobs:
             python: 3.6
           - group: integrity3
             python: 3.6
+          - group: release_check
+            python: 3.6
           - group: docs
             python: 3.6
           - group: usage

@@ -158,7 +158,7 @@ fi
 
 if [[ $GROUP == release_check ]]; then
     jlpm run publish:js --dry-run
-    jlpm run run prepare:python-release
+    jlpm run prepare:python-release
     ./scripts/release_test.sh
 fi
 

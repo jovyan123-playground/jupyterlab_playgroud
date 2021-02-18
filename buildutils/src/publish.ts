@@ -32,7 +32,7 @@ commander
     const curr = utils.getPythonVersion();
     let cmd = 'lerna publish from-package ';
     if (options.dryRun) {
-      cmd += '--no-git-tag-version and --no-push ';
+      cmd += '--no-git-tag-version --no-push ';
     }
     if (curr.indexOf('rc') === -1 && curr.indexOf('a') === -1) {
       utils.run(`${cmd} -m "Publish"`);
