@@ -34,7 +34,7 @@ jupyter lab build
 python -m jupyterlab.browser_check
 
 # if not running on github actions, start JupyterLab
-if [[ -z "${GITHUB_ACTIONS}" ]]; 
+if [[ -z "${GITHUB_ACTIONS}" ]]; then
     jupyter lab
 fi
 
