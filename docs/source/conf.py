@@ -259,5 +259,7 @@ intersphinx_mapping = {'https://docs.python.org/': None}
 
 
 def setup(app):
+    import shutil
+    shutil.copy(os.path.join('..', 'CHANGELOG.md'), 'source/getting_started/changelog.md')
     app.add_css_file('css/custom.css')  # may also be an URL
     build_api_docs(app.outdir)
