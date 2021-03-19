@@ -337,6 +337,8 @@ class AppOptions(HasTraits):
 
     registry = Unicode(help="NPM packages registry URL")
 
+    splice_source = Bool(False, help="Splice source packages into app directory.")
+
     @default('logger')
     def _default_logger(self):
         return logging.getLogger('jupyterlab')
@@ -372,10 +374,8 @@ def watch(app_options=None):
 
     Parameters
     ----------
-    app_dir: string, optional
-        The application directory.
-    logger: :class:`~logger.Logger`, optional
-        The logger instance.
+    app_options: :class:`AppOptions`, optional
+        The application options.
 
     Returns
     -------
@@ -384,7 +384,13 @@ def watch(app_options=None):
     app_options = _ensure_options(app_options)
     _node_check(app_options.logger)
     handler = _AppHandler(app_options)
-    return handler.watch()
+
+    if app_options.splice_source:
+        package_procs = watch_packages(app_options.logger)
+    else:
+        package_procs = []
+
+    return package_procs + handler.watch()
 
 
 
@@ -814,7 +820,10 @@ class _AppHandler(object):
                     messages.append('%s needs to be removed from build' % ext)
 
         # Look for mismatched dependencies
+        src_pkg_dir = osp.abspath(osp.join(HERE, '..', 'packages'))
         for (pkg, dep) in new_deps.items():
+            if old_deps.get(pkg, '').startswith(src_pkg_dir):
+                continue
             if pkg not in old_deps:
                 continue
             # Skip local and linked since we pick them up separately.
@@ -1227,16 +1236,33 @@ class _AppHandler(object):
 
         # Then get the package template.
         data = self._get_package_template()
+        jlab = data['jupyterlab']
 
         if version:
-            data['jupyterlab']['version'] = version
+            jlab['version'] = version
 
         if name:
-            data['jupyterlab']['name'] = name
+            jlab['name'] = name
 
         if static_url:
-            data['jupyterlab']['staticUrl'] = static_url
+            jlab['staticUrl'] = static_url
 
+        # Splice workspace tree as linked dependencies
+        if self._options.splice_source:
+            for path in glob(pjoin(HERE, '..', 'packages', '*', 'package.json')):
+                local_path = osp.dirname(osp.abspath(path))
+                pkg_data = json.loads(Path(path).read_text(encoding='utf-8'))
+                name = pkg_data['name']
+                if name in data['dependencies']:
+                    data['dependencies'][name] = local_path
+                    jlab['linkedPackages'][name] = local_path
+                if name in data['resolutions']:
+                    data['resolutions'][name] = local_path
+            # splice the builder as well
+            local_path = osp.abspath(pjoin(HERE, '..', 'builder'))
+            data['devDependencies']['@jupyterlab/builder'] = local_path
+
+        # Write the package file
         pkg_path = pjoin(staging, 'package.json')
         with open(pkg_path, 'w') as fid:
             json.dump(data, fid, indent=4)
