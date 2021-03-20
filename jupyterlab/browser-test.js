@@ -4,6 +4,8 @@ const path = require('path');
 const fs = require('fs');
 
 const URL = process.argv[2];
+const BROWSER_VAR = 'JLAB_BROWSER_TYPE';
+const BROWSER = process.env[BROWSER_VAR] || 'chromium';
 const OUTPUT_VAR = 'JLAB_BROWSER_CHECK_OUTPUT';
 const OUTPUT = process.env[OUTPUT_VAR];
 
@@ -20,11 +22,10 @@ if (OUTPUT) {
 
 async function main() {
   /* eslint-disable no-console */
-  console.info('Starting Headless Browser');
+  console.info(`Starting Headless ${BROWSER}`);
 
-  const pwBrowser = playwright.chromium;
+  const pwBrowser = playwright[BROWSER];
   const browser = await pwBrowser.launch({
-    headless: false,
     logger: {
       isEnabled: () => !!OUTPUT,
       log: (name, severity, message, args) => console.log(name, message)
@@ -63,13 +64,19 @@ async function main() {
     console.error(html);
   }
 
+  console.log('Waiting for #main selector...');
+  await page.waitForSelector('#main', { timeout: 100000 });
+
   console.log('Waiting for #browserTest selector...');
-  const el = await page.waitForSelector('#browserTest', { timeout: 100000 });
+  const el = await page.waitForSelector('#browserTest', {
+    timeout: 100000,
+    state: 'attached'
+  });
   console.log('Waiting for application to start...');
   let testError = null;
 
   try {
-    await page.waitForSelector('.completed');
+    await page.waitForSelector('.completed', { state: 'attached' });
   } catch (e) {
     testError = e;
   }
