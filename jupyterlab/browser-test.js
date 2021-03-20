@@ -1,4 +1,4 @@
-const puppeteer = require('puppeteer');
+const playwright = require('playwright');
 const inspect = require('util').inspect;
 const path = require('path');
 const fs = require('fs');
@@ -20,14 +20,19 @@ if (OUTPUT) {
 
 async function main() {
   /* eslint-disable no-console */
-  console.info('Starting Chrome Headless');
+  console.info('Starting Headless Browser');
 
-  const browser = await puppeteer.launch({
-    headless: true,
-    dumpio: !!OUTPUT,
-    args: ['--no-sandbox']
+  const pwBrowser = playwright.chromium;
+  const browser = await pwBrowser.launch({
+    headless: false,
+    logger: {
+      isEnabled: () => !!OUTPUT,
+      log: (name, severity, message, args) => console.log(name, message)
+    }
   });
-  const page = await browser.newPage();
+
+  const context = await browser.newContext();
+  const page = await context.newPage();
 
   async function screenshot() {
     if (!OUTPUT) {
@@ -51,12 +56,14 @@ async function main() {
   // Wait for the local file to redirect on notebook >= 6.0
   await page.waitForNavigation();
 
+  console.log('Waiting for page content..');
   const html = await page.content();
   if (inspect(html).indexOf('jupyter-config-data') === -1) {
     console.error('Error loading JupyterLab page:');
     console.error(html);
   }
 
+  console.log('Waiting for #browserTest selector...');
   const el = await page.waitForSelector('#browserTest', { timeout: 100000 });
   console.log('Waiting for application to start...');
   let testError = null;
@@ -90,4 +97,4 @@ process.on('unhandledRejection', up => {
   throw up;
 });
 
-main();
+void main();
