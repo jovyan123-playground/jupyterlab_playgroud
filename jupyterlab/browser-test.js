@@ -22,7 +22,7 @@ if (OUTPUT) {
 
 async function main() {
   /* eslint-disable no-console */
-  console.info(`Starting Headless ${BROWSER}`);
+  console.info(`Starting headless ${BROWSER}...`);
 
   const pwBrowser = playwright[BROWSER];
   const browser = await pwBrowser.launch({
@@ -96,7 +96,7 @@ async function main() {
   if (testError) {
     throw testError;
   }
-  console.info('Chrome test complete');
+  console.info('Browser test complete');
 }
 
 // Stop the process if an error is raised in the async function.
