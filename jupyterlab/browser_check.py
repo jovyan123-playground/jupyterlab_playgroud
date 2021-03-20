@@ -228,10 +228,11 @@ def _jupyter_server_extension_paths():
 
 
 if __name__ == '__main__':
-    skip_option = "--no-browser-test"
-    if skip_option in sys.argv:
-        BrowserApp.test_browser = False
-        sys.argv.remove(skip_option)
+    skip_options = ["--no-browser-test", "--no-chrome-test"]
+    for option in skip_options:
+        if option in sys.argv:
+            BrowserApp.test_browser = False
+            sys.argv.remove(option)
 
     if "--notebook" in sys.argv:
         from notebook.notebookapp import NotebookApp
