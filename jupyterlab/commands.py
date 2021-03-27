@@ -822,7 +822,7 @@ class _AppHandler(object):
         # Look for mismatched dependencies
         src_pkg_dir = osp.abspath(osp.join(HERE, '..', 'packages'))
         for (pkg, dep) in new_deps.items():
-            if old_deps[pkg].startswith(src_pkg_dir):
+            if old_deps.get(pkg, '').startswith(src_pkg_dir):
                 continue
             if pkg not in old_deps:
                 continue
