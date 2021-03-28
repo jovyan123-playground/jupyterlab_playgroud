@@ -6,3 +6,5 @@ pip install -e .
 jlpm
 
 jlpm build
+
+jlpm cache clean
