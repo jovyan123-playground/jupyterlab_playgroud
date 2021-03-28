@@ -1,5 +1,6 @@
 common = [
     '--no-browser',
+    '--debug',
     '--port={port}',
     '--ServerApp.ip=127.0.0.1',
     '--ServerApp.token=""',
@@ -12,7 +13,6 @@ lab_command = ' '.join([
     'jupyter',
     'lab',
     '--dev-mode',
-    '--debug',
     '--extensions-in-dev-mode',
     '--ServerApp.base_url={base_url}lab-dev',
 ] + common + ['>jupyterlab-dev.log 2>&1'])
