@@ -362,6 +362,31 @@ if [[ $GROUP == usage2 ]]; then
     jupyter lab clean --all
 fi
 
+
+if [[ $GROUP == splice_source ]];then
+    # Run the integrity script to link binary files
+    jlpm integrity
+
+    jupyter lab build --minimize=False --debug --dev-build=True --splice-source
+    python -m jupyterlab.browser_check
+
+    cd jupyterlab/tests/mock_packages/mimeextension
+    jupyter labextension install .
+    python -m jupyterlab.browser_check
+
+    jupyter lab --version > version.txt
+    cat version.txt | grep -q "-spliced (app)"
+
+    jupyter lab clean --all
+    cat version.txt | grep -qv "-spliced (app)"
+
+    jupyter labextension install --splice-source .
+    jupyter lab --version > version.txt
+    cat version.txt | grep -q "-spliced (app)"
+    python -m jupyterlab.browser_check
+fi
+
+
 if [[ $GROUP == interop ]]; then
     cd jupyterlab/tests/mock_packages/interop
 

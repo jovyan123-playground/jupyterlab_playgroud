@@ -608,7 +608,7 @@ If you want to test a source extension against the unreleased versions of Jupyte
     jupyter lab --watch --splice-source
 
 This command will splice the local ``packages`` directory into the application directory, allowing you to build source extension(s)
-against the current git checkout.  Note that :ref:`developing a prebuilt extension <prebuilt_dev_workflow>` against a development version of JupyterLab is generally much easier.
+against the current development sources.  To statically build spliced sources, use ``jupyter lab build --splice-source``.  Once a spliced build is created, any subsquent calls to `jupyter labextension build` will be in splice mode by default.  A spliced build can be forced by calling ``jupyter labextension build --splice-source``. Note that :ref:`developing a prebuilt extension <prebuilt_dev_workflow>` against a development version of JupyterLab is generally much easier than source package building.
 
 The package should export EMCAScript 6 compatible JavaScript. It can
 import CSS using the syntax ``require('foo.css')``. The CSS files can

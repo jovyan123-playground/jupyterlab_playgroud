@@ -682,6 +682,8 @@ class LabApp(NBClassicConfigShimMixin, LabServerApp):
                 ensure_dev(self.log)
                 self.log.info(DEV_NOTE)
         else:
+            if self.splice_source:
+                ensure_dev(self.log)
             msgs = ensure_app(self.app_dir)
             if msgs:
                 [self.log.error(msg) for msg in msgs]
