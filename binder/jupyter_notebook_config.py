@@ -46,7 +46,7 @@ c.ServerProxy.servers = {
         'command': [
             '/bin/bash', '-c', lab_splice_command
         ],
-        'timeout': 120,
+        'timeout': 200,
         'absolute_url': True
     }
 }
