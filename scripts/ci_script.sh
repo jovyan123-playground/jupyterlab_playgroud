@@ -382,6 +382,8 @@ if [[ $GROUP == splice_source ]];then
     cat version.txt | grep -q "spliced"
 
     jupyter lab clean --all
+    jupyter lab --version > version.txt
+    cat version.txt
     cat version.txt | grep -q "spliced" && exit 1
 
     jupyter labextension install --splice-source .
