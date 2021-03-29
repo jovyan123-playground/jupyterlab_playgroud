@@ -556,6 +556,8 @@ This ``install.json`` file is used by JupyterLab to help a user know how to mana
 
 
 
+.. _source_dev_workflow:
+
 Development workflow for source extensions
 ------------------------------------------
 
