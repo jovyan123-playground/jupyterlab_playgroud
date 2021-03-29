@@ -125,10 +125,8 @@ class BaseExtensionApp(JupyterApp, DebugLogFileMixin):
 
     @default('splice_source')
     def _default_splice_source(self):
-        if self.app_dir:
-            version = get_app_version(AppOptions(app_dir=self.app_dir))
-            return version.endswith('-spliced')
-        return False
+        version = get_app_version(AppOptions(app_dir=self.app_dir))
+        return version.endswith('-spliced')
 
     def start(self):
         if self.app_dir and self.app_dir.startswith(HERE):
