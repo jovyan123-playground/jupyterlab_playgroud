@@ -56,7 +56,7 @@ For a more user-focused binder see the
 The binder instance adds two endpoints in addition to ``/lab``: ``/lab-dev`` and ``/lab-spliced``.
 The ``lab-dev`` endpoint is the equivalent of checking out the repo locally and running ``jupyter lab --dev-mode``.
 The ``lab-spliced`` endpoint is the equivalent of building JupyterLab in spliced mode and running ``jupyter lab``.
-See the `Development workflow for source extensions <extension_dev#source_dev_workflow>`__ for more information on spliced mode.
+See the `Development workflow for source extensions <../extension/extension_dev.html#development-workflow-for-source-extensions>`__ for more information on spliced mode.
 
 Build utilities: ``builtutils/``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

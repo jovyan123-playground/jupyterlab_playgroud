@@ -375,14 +375,14 @@ if [[ $GROUP == splice_source ]];then
     python -m jupyterlab.browser_check
 
     jupyter lab --version > version.txt
-    cat version.txt | grep -q "-spliced (app)"
+    cat version.txt | grep -q "spliced"
 
     jupyter lab clean --all
-    cat version.txt | grep -qv "-spliced (app)"
+    cat version.txt | grep -qv "spliced"
 
     jupyter labextension install --splice-source .
     jupyter lab --version > version.txt
-    cat version.txt | grep -q "-spliced (app)"
+    cat version.txt | grep -q "spliced"
     python -m jupyterlab.browser_check
 fi
 
