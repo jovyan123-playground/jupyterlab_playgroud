@@ -368,6 +368,9 @@ if [[ $GROUP == splice_source ]];then
     jlpm integrity
 
     jupyter lab build --minimize=False --debug --dev-build=True --splice-source
+    jupyter lab --version > version.txt
+    cat version.txt
+    cat version.txt | grep -q "spliced"
     python -m jupyterlab.browser_check
 
     cd jupyterlab/tests/mock_packages/mimeextension
@@ -375,6 +378,7 @@ if [[ $GROUP == splice_source ]];then
     python -m jupyterlab.browser_check
 
     jupyter lab --version > version.txt
+    cat version.txt
     cat version.txt | grep -q "spliced"
 
     jupyter lab clean --all

@@ -35,6 +35,8 @@ jobs:
             python: 3.6
           - group: examples
             python: 3.6
+          - group: splice_source
+            python: 3.6
       fail-fast: false
     timeout-minutes: 30
     runs-on: ubuntu-20.04
