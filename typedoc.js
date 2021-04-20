@@ -1,4 +1,4 @@
-// const git = require('git-rev-sync');
+const fs = require('fs');
 
 const packages = [
   // 'application-extension',
