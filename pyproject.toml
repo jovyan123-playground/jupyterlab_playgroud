@@ -20,6 +20,3 @@ testpaths="jupyterlab/tests"
 norecursedirs="node_modules .git _build"
 addopts="--pdbcls=IPython.terminal.debugger:Pdb -v --junitxml=junit.xml"
 ignore="tests examples"
-
-[license]
-file="LICENSE"
