@@ -23,7 +23,7 @@ try:
     cmdclass = wrap_installers(post_develop=post_develop)
 
     post_develop = npm_builder(
-        build_cmd="build:labextension", build_dir=lab_path, npm="jlpm"
+        build_cmd="build:labextension", build_dir=lab_path, npm=["jlpm"]
     )
     setup_args.update(dict(
         cmdclass=cmdclass,

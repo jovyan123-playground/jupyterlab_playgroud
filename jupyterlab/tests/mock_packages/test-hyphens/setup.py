@@ -20,7 +20,7 @@ setup_args = dict(
 try:
     from jupyter_packaging import get_data_files, npm_builder, wrap_installers
     post_develop = npm_builder(
-        build_cmd="build:labextension", build_dir=lab_path, npm="jlpm"
+        build_cmd="build:labextension", build_dir=lab_path, npm=["jlpm"]
     )
 
     cmdclass = wrap_installers(post_develop=post_develop)
