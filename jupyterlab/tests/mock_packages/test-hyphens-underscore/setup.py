@@ -20,11 +20,11 @@ setup_args = dict(
 
 try:
     from jupyter_packaging import get_data_files, npm_builder, wrap_installers
-    cmdclass = wrap_installers(post_develop=post_develop)
-
     post_develop = npm_builder(
         build_cmd="build:labextension", build_dir=lab_path, npm=["jlpm"]
     )
+    cmdclass = wrap_installers(post_develop=post_develop)
+
     setup_args.update(dict(
         cmdclass=cmdclass,
         data_files=get_data_files(data_files_spec),
