@@ -123,10 +123,7 @@ class TestEnv(object):
         self.path_patch.stop()
         try:
             self.test_dir.cleanup()
-        except OSError as e:
-            if e.errno != errno.EDESTADDRREQ:
-                raise e
-        except PermissionError:
+        except (OSError, PermissionError) as e:
             pass
 
     def __enter__(self):
