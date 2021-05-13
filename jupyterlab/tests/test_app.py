@@ -3,6 +3,7 @@
 
 import argparse
 import atexit
+import errno
 import glob
 import json
 import logging
@@ -122,7 +123,10 @@ class TestEnv(object):
         self.path_patch.stop()
         try:
             self.test_dir.cleanup()
-        except PermissionError as e:
+        except OSError as e:
+            if e.errno != errno.EDESTADDRREQ:
+                raise e
+        except PermissionError:
             pass
 
     def __enter__(self):
