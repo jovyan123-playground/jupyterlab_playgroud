@@ -175,7 +175,7 @@ program
   .command('start')
   .option('--port', 'Port to use for the registry')
   .option('--path', 'Path to use for the registry')
-  .action((options: any) => {
+  .action(async (options: any) => {
     const out_dir = options.path || DEFAULT_OUT_DIR;
     await startLocalRegistry(out_dir, options.port || DEFAULT_PORT);
   });
@@ -183,7 +183,7 @@ program
 program
   .command('stop')
   .option('--path', 'Path to use for the registry')
-  .action((options: any) => {
+  .action(async (options: any) => {
     const out_dir = options.path || DEFAULT_OUT_DIR;
     await stopLocalRegistry(out_dir);
   });
