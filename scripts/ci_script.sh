@@ -163,7 +163,7 @@ fi
 if [[ $GROUP == release_check ]]; then
     jlpm run publish:js --dry-run
     jlpm run prepare:python-release
-    node buildutils/lib/local-repository.js
+    node buildutils/lib/local-repository.js start
     pushd packages/application
     npm publish
     popd
