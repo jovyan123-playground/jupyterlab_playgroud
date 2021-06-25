@@ -1,12 +1,12 @@
-const fs = require('fs');
-const child_process = require('child_process');
-const path = require('path');
-const os = require('os');
-const ps = require('process');
+import * as fs from 'fs';
+import * as child_process from 'child_process';
+import * as path from 'path';
+import * as os from 'os';
+import * as ps from 'process';
 
-const { Command } = require('commander');
+import { Command } from 'commander';
 
-const utils = require('./utils');
+import * as utils from './utils';
 
 const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 const DEFAULT_OUT_DIR = path.join(os.tmpdir(), 'verdaccio');
@@ -43,7 +43,18 @@ auth:
     file: ${out_dir}/htpasswd
 uplinks:
     npmjs:
-        url: ${prev_npm}`;
+        url: ${prev_npm}
+packages:
+  '@*/*':
+    access: $all
+    publish: $authenticated
+    unpublish: $authenticated
+    proxy: npmjs
+  '**':
+    access: $all
+    publish: $authenticated
+    unpublish: $authenticated
+    proxy: npmjs`;
   fs.writeFileSync(config, config_text, { encoding: 'utf-8' });
 
   const log_file = path.join(out_dir, 'verdaccio.log');
@@ -57,8 +68,9 @@ uplinks:
     fs.unlinkSync(log_file);
   }
 
-  const out = fs.openSync(log_file, 'a');
-  const err = fs.openSync(log_file, 'a');
+  // Assign as `any`` for compatibility with spawn `OpenMode`` options
+  const out: any = fs.openSync(log_file, 'a');
+  const err: any = fs.openSync(log_file, 'a');
 
   const options = { cwd: out_dir, detached: true, stdio: ['ignore', out, err] };
 
@@ -102,6 +114,7 @@ uplinks:
 
   // Set registry to local registry
   const custom_registry_url = `http://localhost:${port}`;
+  child_process.execSync(`npm config set registry "${custom_registry_url}"`);
   try {
     child_process.execSync(`yarn config set registry "${custom_registry_url}"`);
   } catch (e) {
