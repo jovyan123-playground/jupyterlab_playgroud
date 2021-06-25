@@ -113,10 +113,10 @@ packages:
   utils.writeJSONFile(info_file, data);
 
   // Set registry to local registry
-  const custom_registry_url = `http://localhost:${port}`;
-  child_process.execSync(`npm config set registry "${custom_registry_url}"`);
+  const local_registry = `http://localhost:${port}`;
+  child_process.execSync(`npm config set registry "${local_registry}"`);
   try {
-    child_process.execSync(`yarn config set registry "${custom_registry_url}"`);
+    child_process.execSync(`yarn config set registry "${local_registry}"`);
   } catch (e) {
     // yarn not available
   }
@@ -127,7 +127,7 @@ packages:
     NPM_USER: 'foo',
     NPM_PASS: 'bar',
     NPM_EMAIL: 'foo@bar.com',
-    NPM_REGISTRY: custom_registry_url
+    NPM_REGISTRY: local_registry
   };
   const npm_cli_login_bin = path.join(bin_dir, 'npm-cli-login');
   console.log('Logging in');
@@ -159,6 +159,7 @@ async function stopLocalRegistry(out_dir: string) {
   }
 
   // Restore the previous registry entries
+  console.log('Restoring registry settings');
   if (data.prev_npm) {
     child_process.execSync(`npm set registry ${data.prev_npm}`);
   } else {
@@ -172,13 +173,6 @@ async function stopLocalRegistry(out_dir: string) {
     } catch (e) {
       // yarn not available
     }
-  }
-
-  // Log out
-  try {
-    child_process.execSync(`npm logout`, { stdio: 'pipe' });
-  } catch (e) {
-    // Do nothing
   }
 }
 
