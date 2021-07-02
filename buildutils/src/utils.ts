@@ -224,9 +224,6 @@ export function postbump(): void {
   const data = readJSONFile(filePath);
   data.jupyterlab.version = curr;
   writeJSONFile(filePath, data);
-
-  // Commit changes.
-  run('git commit -am "bump version"');
 }
 
 /**
