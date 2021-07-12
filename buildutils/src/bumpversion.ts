@@ -17,6 +17,9 @@ commander
     // Get the previous version.
     const prev = utils.getPythonVersion();
 
+    // Whether to commit after bumping
+    const commit = opts.skipCommit !== true;
+
     // For patch, defer to `patch:release` command
     if (spec === 'patch') {
       let cmd = 'jlpm run patch:release';
@@ -65,7 +68,6 @@ commander
       utils.run(`bumpversion ${spec}`);
 
       // Run the post-bump script.
-      const commit = options.skipCommit !== true;
       utils.postbump(commit);
 
       return;
@@ -129,7 +131,7 @@ commander
     utils.run(`bumpversion ${spec}`);
 
     // Run the post-bump script.
-    utils.postbump();
+    utils.postbump(commit);
   });
 
 commander.parse(process.argv);
