@@ -27,7 +27,7 @@ ignore = ["binder/**", "builder/**", "buildutils/**", "design/**", "dev_mode/**"
 [tool.jupyter-releaser.options]
 ignore-glob = ["packages/ui-components/docs/source/ui_components.rst"]
 ignore-links = ["../api/*.*"]
-version-cmd = "jlpm bumpversion --force"
+version-cmd = "jlpm bumpversion --force --skip-commit"
 npm-install-options = "--legacy-peer-deps"
 
 [tool.jupyter-releaser.hooks]

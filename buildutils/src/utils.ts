@@ -215,7 +215,7 @@ ${status}`
 /**
  * Post-bump.
  */
-export function postbump(): void {
+export function postbump(commit = true): void {
   // Get the current version.
   const curr = getPythonVersion();
 
@@ -224,6 +224,11 @@ export function postbump(): void {
   const data = readJSONFile(filePath);
   data.jupyterlab.version = curr;
   writeJSONFile(filePath, data);
+
+  // Commit changes.
+  if (commit) {
+    run('git commit -am "bump version"');
+  }
 }
 
 /**

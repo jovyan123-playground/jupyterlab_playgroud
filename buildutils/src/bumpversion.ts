@@ -11,6 +11,7 @@ commander
   .description('Update the version and publish')
   .option('--dry-run', 'Dry run')
   .option('--force', 'Force the upgrade')
+  .option('--skip-commit', 'Whether to skip commit changes')
   .arguments('<spec>')
   .action((spec: any, opts: any) => {
     // Get the previous version.
@@ -64,7 +65,8 @@ commander
       utils.run(`bumpversion ${spec}`);
 
       // Run the post-bump script.
-      utils.postbump();
+      const commit = options.skipCommit !== true;
+      utils.postbump(commit);
 
       return;
     }
