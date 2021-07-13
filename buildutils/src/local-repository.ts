@@ -217,7 +217,8 @@ function fixLinks(package_dir: string) {
 function publishPackages(dist_dir: string) {
   const paths = glob.sync(path.join(dist_dir, '*.tgz'));
   paths.forEach(package_path => {
-    utils.run(`npm publish ${package_path}`);
+    const name = path.basename(package_path);
+    utils.run(`npm publish ${name}`, { cwd: dist_dir });
   });
 }
 
