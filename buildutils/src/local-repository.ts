@@ -215,7 +215,7 @@ function fixLinks(package_dir: string) {
  * Publish the npm tar files in a given directory
  */
 function publishPackages(dist_dir: string) {
-  paths = glob.sync(path.join(dist_dir, '*.tgz'));
+  const paths = glob.sync(path.join(dist_dir, '*.tgz'));
   paths.forEach(package_path => {
     child_process.execSync(`npm publish ${package_path}`);
   });
