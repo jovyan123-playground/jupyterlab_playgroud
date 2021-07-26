@@ -11,6 +11,8 @@
  * Ensure a consistent version of all packages.
  * Manage the metapackage meta package.
  */
+import { execSync } from 'child_process';
+import * as glob from 'glob';
 import * as path from 'path';
 import * as fs from 'fs-extra';
 import * as utils from './utils';
@@ -294,11 +296,10 @@ function ensureBranch(): string[] {
   files.forEach(filePath => {
     const oldData = fs.readFileSync(filePath, 'utf-8');
     let newData = oldData;
-    let found = false;
     urlMap.forEach(section => {
       const test = new RegExp(section[0], 'g');
       const replacer = section[1];
-      if (newData.matchAll(test).next().value) {
+      if (newData.match(test)) {
         newData = newData.replace(test, replacer);
       }
     });
@@ -314,7 +315,7 @@ function ensureBranch(): string[] {
     let workflowData = fs.readFileSync(filePath, 'utf-8');
     const test = new RegExp(`\\[${source}\\]`, 'g');
     if (workflowData.match(test)) {
-      if (workflowData.match(test)[1] !== `[${target}]`) {
+      if (workflowData.match(test)![1] !== `[${target}]`) {
         messages.push(`Overwriting ${filePath}`);
         workflowData = workflowData.replace(test, `[${target}]`);
         fs.writeFileSync(filePath, workflowData, 'utf-8');
