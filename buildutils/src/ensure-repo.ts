@@ -545,7 +545,7 @@ export async function ensureIntegrity(): Promise<boolean> {
 
   // Handle branch integrity
   const branchMessages = ensureBranch();
-  if (branchMessages) {
+  if (branchMessages.length > 0) {
     messages['branch'] = branchMessages;
   }
 
