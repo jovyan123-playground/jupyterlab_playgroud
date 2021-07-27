@@ -3,8 +3,11 @@ name: Linux JS Flaky Tests
 on:
   push:
     branches: [master]
-  pull_request:
-    branches: ['*']
+  pull_request:=
+    branches: [master]
+  release:
+    types: [published]
+
 jobs:
   linuxjs:
     name: JS
