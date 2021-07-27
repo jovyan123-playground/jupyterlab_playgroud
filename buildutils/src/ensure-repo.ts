@@ -302,6 +302,12 @@ function ensureBranch(): string[] {
       if (newData.match(test)) {
         newData = newData.replace(test, replacer);
       }
+      // Make sure the badge link points to stable
+      if (path.basename(filePath) === 'README.md') {
+        const badgeLink = '(http://jupyterlab.readthedocs.io/en/stable/)';
+        const toReplace = badgeLink.replace('stable', rtdSource);
+        newData = newData.replace(toReplace, badgeLink);
+      }
     });
     if (newData !== oldData) {
       messages.push(`Overwriting ${filePath}`);
