@@ -274,7 +274,7 @@ function ensureBranch(): string[] {
   // Handle urls in files
   // Get all files matching the desired file types
   const fileTypes = ['.json', '.md', '.rst', '.yml', '.ts', '.tsx', '.py'];
-  let files = execSync('git ls-tree -r master --name-only')
+  let files = execSync('git ls-tree -r HEAD --name-only')
     .toString()
     .trim()
     .split(/\r?\n/);
