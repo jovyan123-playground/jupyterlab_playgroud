@@ -29,7 +29,6 @@ COPY ./dev_mode/ /tmp/jupyterlab-dev/dev_mode/
 COPY ./jupyterlab/ /tmp/jupyterlab-dev/jupyterlab/
 COPY ./packages/ /tmp/jupyterlab-dev/packages/
 COPY ./scripts/ /tmp/jupyterlab-dev/scripts/
-COPY ./docs/ /tmp/jupyterlab-dev/docs/
 COPY ./*.* ./LICENSE /tmp/jupyterlab-dev/
 
 RUN pushd /tmp/jupyterlab-dev \

@@ -262,13 +262,16 @@ function ensureBranch(): string[] {
   const { source, target, rtdSource, rtdTarget } = URL_CONFIG;
 
   // Handle the github_version in conf.py
+  // Docs do not exist in the UI tests docker image, test for file exists
   const confPath = 'docs/source/conf.py';
-  let confData = fs.readFileSync(confPath, 'utf-8');
-  const confTest = new RegExp('"github_version": "(.*)"');
-  if (source !== target) {
-    messages.push(`Overwriting ${confPath}`);
-    confData = confData.replace(confTest, `"github_version": "${target}"`);
-    fs.writeFileSync(confPath, confData, 'utf-8');
+  if (fs.existsSync(confPath)) {
+    let confData = fs.readFileSync(confPath, 'utf-8');
+    const confTest = new RegExp('"github_version": "(.*)"');
+    if (source !== target) {
+      messages.push(`Overwriting ${confPath}`);
+      confData = confData.replace(confTest, `"github_version": "${target}"`);
+      fs.writeFileSync(confPath, confData, 'utf-8');
+    }
   }
 
   // Handle urls in files
