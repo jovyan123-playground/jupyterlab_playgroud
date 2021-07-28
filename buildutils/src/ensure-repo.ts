@@ -553,7 +553,7 @@ export async function ensureIntegrity(): Promise<boolean> {
 
   if (process.env.SKIP_INTEGRITY_CHECK === 'true') {
     console.log('Skipping integrity check');
-    return [];
+    return true;
   }
 
   // Handle branch integrity
