@@ -393,11 +393,6 @@ function ensureMetaPackage(): string[] {
  * Ensure the jupyterlab application package.
  */
 function ensureJupyterlab(): string[] {
-  if (process.env.SKIP_INTEGRITY_CHECK === 'true') {
-    console.log('Skipping integrity check');
-    return [];
-  }
-
   const basePath = path.resolve('.');
   const corePath = path.join(basePath, 'dev_mode', 'package.json');
   const corePackage = utils.readJSONFile(corePath);
@@ -555,6 +550,11 @@ function ensureBuildUtils() {
  */
 export async function ensureIntegrity(): Promise<boolean> {
   const messages: Dict<string[]> = {};
+
+  if (process.env.SKIP_INTEGRITY_CHECK === 'true') {
+    console.log('Skipping integrity check');
+    return [];
+  }
 
   // Handle branch integrity
   const branchMessages = ensureBranch();

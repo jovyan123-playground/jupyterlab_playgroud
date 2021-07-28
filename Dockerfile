@@ -1,7 +1,7 @@
 FROM mambaorg/micromamba:0.14.0 as build
 
 # Install basic tools
-RUN micromamba install -qy -c conda-forge python nodejs yarn=1.21 build \
+RUN micromamba install -qy -c conda-forge python nodejs yarn \
     && useradd --shell /bin/bash jovyan \
     && chown jovyan $HOME
 
@@ -39,7 +39,6 @@ USER jovyan
 WORKDIR ${HOME}
 
 ENV PATH="/home/micromamba/.local/bin:$PATH"
-ENV SKIP_INTEGRITY_CHECK=true
 
 RUN mkdir -p /home/micromamba/jlab_root
 
