@@ -39,6 +39,7 @@ USER jovyan
 WORKDIR ${HOME}
 
 ENV PATH="/home/micromamba/.local/bin:$PATH"
+ENV SKIP_INTEGRITY_CHECK=true
 
 RUN mkdir -p /home/micromamba/jlab_root
 

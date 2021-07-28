@@ -262,16 +262,13 @@ function ensureBranch(): string[] {
   const { source, target, rtdSource, rtdTarget } = URL_CONFIG;
 
   // Handle the github_version in conf.py
-  // Docs do not exist in the UI tests docker image, test for file exists
   const confPath = 'docs/source/conf.py';
-  if (fs.existsSync(confPath)) {
-    let confData = fs.readFileSync(confPath, 'utf-8');
-    const confTest = new RegExp('"github_version": "(.*)"');
-    if (source !== target) {
-      messages.push(`Overwriting ${confPath}`);
-      confData = confData.replace(confTest, `"github_version": "${target}"`);
-      fs.writeFileSync(confPath, confData, 'utf-8');
-    }
+  let confData = fs.readFileSync(confPath, 'utf-8');
+  const confTest = new RegExp('"github_version": "(.*)"');
+  if (source !== target) {
+    messages.push(`Overwriting ${confPath}`);
+    confData = confData.replace(confTest, `"github_version": "${target}"`);
+    fs.writeFileSync(confPath, confData, 'utf-8');
   }
 
   // Handle urls in files
@@ -396,6 +393,11 @@ function ensureMetaPackage(): string[] {
  * Ensure the jupyterlab application package.
  */
 function ensureJupyterlab(): string[] {
+  if (process.env.SKIP_INTEGRITY_CHECK === 'true') {
+    console.log('Skipping integrity check');
+    return;
+  }
+
   const basePath = path.resolve('.');
   const corePath = path.join(basePath, 'dev_mode', 'package.json');
   const corePackage = utils.readJSONFile(corePath);
