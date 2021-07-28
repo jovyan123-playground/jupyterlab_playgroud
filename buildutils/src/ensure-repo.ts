@@ -395,7 +395,7 @@ function ensureMetaPackage(): string[] {
 function ensureJupyterlab(): string[] {
   if (process.env.SKIP_INTEGRITY_CHECK === 'true') {
     console.log('Skipping integrity check');
-    return;
+    return [];
   }
 
   const basePath = path.resolve('.');
