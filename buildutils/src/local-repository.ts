@@ -229,7 +229,7 @@ function publishPackages(dist_dir: string) {
       ) {
         return;
       }
-      throw error;
+      throw err;
     }
   });
 }
