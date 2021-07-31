@@ -214,17 +214,11 @@ function fixLinks(package_dir: string) {
 /**
  * Publish the npm tar files in a given directory
  */
-function publishPackages(distDir: string) {
-  const paths = glob.sync(path.join(distDir, '*.tgz'));
-  paths.forEach(pkgPath => {
-    const pkgJson = path.join(pkgPath, 'package.json');
-    const pkgData = utils.readJSONFile(pkgJson);
-    const specifier = `${pkgData.name}@${pkgData.version}`;
-    const cmd = `npm info ${specifier}`;
-    const output = utils.run(cmd, { stdio: 'pipe' }, true);
-    if (output.indexOf('dist-tags') === -1) {
-      utils.run(`npm publish ${pkgData.name}`, { cwd: distDir });
-    }
+function publishPackages(dist_dir: string) {
+  const paths = glob.sync(path.join(dist_dir, '*.tgz'));
+  paths.forEach(package_path => {
+    const filename = path.basename(package_path);
+    utils.run(`npm publish ${filename}`, { cwd: dist_dir });
   });
 }
 
