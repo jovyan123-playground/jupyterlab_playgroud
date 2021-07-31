@@ -221,9 +221,9 @@ function publishPackages(distDir: string) {
     const pkgData = utils.readJSONFile(pkgJson);
     const specifier = `${pkgData.name}@${pkgData.version}`;
     try {
-      util.verifyPublished(specifier);
+      utils.verifyPublished(specifier);
     } catch (e) {
-      util.run(`npm publish ${name}`, { cwd: distDir });
+      utils.run(`npm publish ${name}`, { cwd: distDir });
     }
   });
 }
