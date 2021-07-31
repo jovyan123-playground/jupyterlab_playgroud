@@ -220,10 +220,10 @@ function publishPackages(distDir: string) {
     const pkgJson = path.join(pkgPath, 'package.json');
     const pkgData = utils.readJSONFile(pkgJson);
     const specifier = `${pkgData.name}@${pkgData.version}`;
-    try {
-      utils.verifyPublished(specifier);
-    } catch (e) {
-      utils.run(`npm publish ${name}`, { cwd: distDir });
+    const cmd = `npm info ${specifier}`;
+    const output = utils.run(cmd, { stdio: 'pipe' }, true);
+    if (output.indexOf('dist-tags') === -1) {
+      utils.run(`npm publish ${pkgData.name}`, { cwd: distDir });
     }
   });
 }
