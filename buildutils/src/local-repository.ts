@@ -214,23 +214,16 @@ function fixLinks(package_dir: string) {
 /**
  * Publish the npm tar files in a given directory
  */
-function publishPackages(dist_dir: string) {
-  const paths = glob.sync(path.join(dist_dir, '*.tgz'));
-  paths.forEach(package_path => {
-    const name = path.basename(package_path);
+function publishPackages(distDir: string) {
+  const paths = glob.sync(path.join(distDir, '*.tgz'));
+  paths.forEach(pkgPath => {
+    const pkgJson = path.join(pkgPath, 'package.json');
+    const pkgData = utils.readJSONFile(pkgJson);
+    const specifier = `${pkgData.name}@${pkgData.version}`;
     try {
-      child_process.execSync(`npm publish ${name}`, { cwd: dist_dir });
-    } catch (err) {
-      // Packages may already exist if we are doing a patch release.
-      const stderr = (err.stderr && err.stderr.toString()) || err.toString();
-      if (
-        stderr.indexOf('EPUBLISHCONFLICT') !== -1 ||
-        stderr.indexOf('previously published versions') !== -1
-      ) {
-        console.log('Skipping already published package');
-        return;
-      }
-      throw err;
+      util.verifyPublished(specifier);
+    } catch (e) {
+      util.run(`npm publish ${name}`, { cwd: distDir });
     }
   });
 }
