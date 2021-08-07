@@ -70,6 +70,7 @@ jobs:
         uses: jupyter-server/jupyter_releaser/.github/actions/check-release@v1
         env:
           RH_VERSION_SPEC: build
+          RH_SINCE: foo
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
 
