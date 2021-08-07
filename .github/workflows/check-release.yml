@@ -58,7 +58,7 @@ jobs:
 
       - name: Cache checked links build
         uses: actions/cache@v2
-        if: ${{ matrix.group == 'linkcheck' }}
+        if: ${{ matrix.group == 'link_check' }}
         with:
           path: ~/.cache/pytest-link-check
           key: ${{ runner.os }}-linkcheck-${{ hashFiles('**/*.rst', '**/*.md') }}-changelog
@@ -74,7 +74,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Run Link Check
-        if: ${{ matrix.group == 'linkcheck' }}
+        if: ${{ matrix.group == 'link_check' }}
         uses: jupyter-server/jupyter_releaser/.github/actions/check-links@v1
 
       - name: Upload Assets
