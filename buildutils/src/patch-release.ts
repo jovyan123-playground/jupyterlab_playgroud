@@ -64,7 +64,7 @@ commander
     utils.run('bumpversion release --allow-dirty'); // switches to final.
 
     // Run post-bump actions.
-    const commit = opts.skipCommit !== true;
+    const commit = options.skipCommit !== true;
     utils.postbump(commit);
   });
 
