@@ -134,32 +134,32 @@ packages:
   console.log('Logging in');
   const loginPs = child_process.spawn(
     'npm',
-    `login -e ${email} -r ${local_registry}`.split(' ')
+    `login -r ${local_registry}`.split(' ')
   );
 
   const loggedIn = new Promise<void>((accept, reject) => {
     loginPs.stdout.on('data', (chunk: string) => {
       const data = Buffer.from(chunk, 'utf-8').toString().trim();
-      console.log('debug:', data);
+      console.log('stdout:', data);
       switch (data) {
         case 'Username:':
-          console.log('Passing username...');
           loginPs.stdin.write(user + '\n');
           break;
         case 'Password:':
-          console.log('Passing password...');
           loginPs.stdin.write(pass + '\n');
           break;
-        case 'Email':
-          console.log('Passing email...');
+        case 'Email: (this IS public)':
           loginPs.stdin.write(email + '\n');
           break;
       }
       if (data.indexOf('Logged in as') !== -1) {
-        console.log('debug: matched');
         loginPs.stdin.end();
         accept();
       }
+    });
+    loginPs.stderr.on('data', (chunk: string) => {
+      const data = Buffer.from(chunk, 'utf-8').toString().trim();
+      console.log('stderr:', data);
     });
     loginPs.on('error', error => reject(error));
     loginPs.on('close', () => accept());
