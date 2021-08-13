@@ -128,16 +128,44 @@ packages:
   }
 
   // Log in using cli and temp credentials
-  const env = {
-    ...process.env,
-    NPM_USER: 'foo',
-    NPM_PASS: 'bar',
-    NPM_EMAIL: 'foo@bar.com',
-    NPM_REGISTRY: local_registry
-  };
-  const npm_cli_login_bin = path.join(bin_dir, 'npm-cli-login');
+  const user = 'foo';
+  const pass = 'bar';
+  const email = 'foo@bar.com';
   console.log('Logging in');
-  child_process.execSync(npm_cli_login_bin, { env, stdio: 'pipe' });
+  const loginPs = child_process.spawn(
+    'npm',
+    `login -r ${local_registry}`.split(' ')
+  );
+
+  const loggedIn = new Promise<void>((accept, reject) => {
+    loginPs.stdout.on('data', (chunk: string) => {
+      const data = Buffer.from(chunk, 'utf-8').toString().trim();
+      console.log('stdout:', data);
+      switch (data) {
+        case 'Username:':
+          loginPs.stdin.write(user + '\n');
+          break;
+        case 'Password:':
+          loginPs.stdin.write(pass + '\n');
+          break;
+        case 'Email: (this IS public)':
+          loginPs.stdin.write(email + '\n');
+          break;
+      }
+      if (data.indexOf('Logged in as') !== -1) {
+        loginPs.stdin.end();
+      }
+    });
+    loginPs.stderr.on('data', (chunk: string) => {
+      const data = Buffer.from(chunk, 'utf-8').toString().trim();
+      console.log('stderr:', data);
+    });
+    loginPs.on('error', error => reject(error));
+    loginPs.on('close', () => accept());
+  });
+
+  await loggedIn;
+  loginPs.kill();
 
   console.log('Running in', out_dir);
   ps.exit(0);
