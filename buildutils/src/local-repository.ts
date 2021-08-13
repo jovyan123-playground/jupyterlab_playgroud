@@ -154,7 +154,6 @@ packages:
       }
       if (data.indexOf('Logged in as') !== -1) {
         loginPs.stdin.end();
-        accept();
       }
     });
     loginPs.stderr.on('data', (chunk: string) => {
