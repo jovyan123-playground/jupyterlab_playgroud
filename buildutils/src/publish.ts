@@ -102,7 +102,7 @@ commander
     let attempt = 0;
     while (attempt < 10) {
       try {
-        utils.run(`npm install ${specifiers}`, { cwd: installDir });
+        utils.run(`npm install ${specifiers.join(' ')}`, { cwd: installDir });
         break;
       } catch (e) {
         console.error(e);
@@ -112,7 +112,8 @@ commander
       }
     }
     if (attempt == 10) {
-      throw new Error('Could not install packages');
+      console.error('Could not install packages');
+      process.exit(1);
     }
 
     // Emit a system beep.
