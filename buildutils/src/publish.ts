@@ -50,7 +50,7 @@ commander
 
       // Ensure a clean git environment
       try {
-        utils.run('git commit -am "bump version"');
+        utils.run('git commit -am "[ci skip] bump version"');
       } catch (e) {
         // do nothing
       }
