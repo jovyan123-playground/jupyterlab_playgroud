@@ -529,9 +529,9 @@ export async function ensurePackage(
     data['publishConfig'] = { access: 'public' };
   }
 
-  // Ensure there is not prepublishOnly script
+  // Ensure there is not a prepublishOnly script.
   // Since publishing is handled by an automated script and we don't
-  // Want to run individual scripts during publish
+  // Want to run individual scripts during publish.
   if (data.scripts.prepublishOnly) {
     delete data.scripts.prepublishOnly;
   }
