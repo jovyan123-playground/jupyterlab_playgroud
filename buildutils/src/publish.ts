@@ -23,7 +23,7 @@ commander
   .description('Publish the JS packages')
   .option(
     '--skip-build',
-    'Skip the clean and build step (if there was a network error during a JS publish'
+    'Skip the build step (if there was a network error during a JS publish'
   )
   .option('--skip-publish', 'Skip publish and only handle tags')
   .option('--skip-tags', 'publish assets but do not handle tags')
