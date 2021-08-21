@@ -68,7 +68,7 @@ jobs:
       - name: Configure Version Spec
         id: version-spec
         if: ${{ matrix.group == 'check_release' }}
-        run:
+        run: |
           set -eux
           version = $(python setup.py --version)
           if [[ $version =~ ^[0-9]\.[0-9]\.[0-9]$ ]]; then
