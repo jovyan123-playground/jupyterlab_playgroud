@@ -25,7 +25,7 @@
     "style/*.css"
   ],
   "scripts": {
-    "build": "webpack",
+    "build": "webpack --mode=production",
     "clean": "rimraf style/",
     "prepublishOnly": "npm run build",
     "watch": "webpack --watch"
