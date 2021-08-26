@@ -56,7 +56,6 @@
   "devDependencies": {
     "@jupyterlab/testutils": "^3.3.0-alpha.6",
     "@types/jest": "^26.0.10",
-    "canvas": "^2.6.1",
     "csv-spectrum": "^1.0.0",
     "jest": "^26.4.2",
     "rimraf": "~3.0.0",

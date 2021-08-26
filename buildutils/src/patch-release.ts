@@ -27,7 +27,7 @@ commander
     utils.prebump();
 
     // Version the changed
-    let cmd = `lerna version patch -m \"New version\" --no-push`;
+    let cmd = `lerna version patch -m \"[ci skip] New version\" --no-push`;
     if (options.all) {
       cmd += ' --force-publish=*';
     }

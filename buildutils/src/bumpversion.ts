@@ -82,7 +82,7 @@ commander
       lernaVersion += ' --preid=alpha';
     }
 
-    let cmd = `lerna version -m \"New version\" --force-publish=* --no-push ${lernaVersion}`;
+    let cmd = `lerna version -m \"[ci skip] New version\" --force-publish=* --no-push ${lernaVersion}`;
     if (opts.force) {
       cmd += ' --yes';
     }
