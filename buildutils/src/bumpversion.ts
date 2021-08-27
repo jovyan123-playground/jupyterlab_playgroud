@@ -14,7 +14,7 @@ commander
   .option('--skip-commit', 'Whether to skip commit changes')
   .arguments('<spec>')
   .action((spec: any, opts: any) => {
-    utils.exitOUuncaughtException();
+    utils.exitOnUuncaughtException();
 
     // Get the previous version.
     const prev = utils.getPythonVersion();

@@ -14,7 +14,7 @@ const backSlash = /\\/g;
 /**
  *  Exit with an error code on uncaught error.
  */
-export function exitOUuncaughtException() {
+export function exitOnUuncaughtException(): void {
   process.on('uncaughtException', function (err) {
     console.error('Uncaught exception', err);
     process.exit(1);

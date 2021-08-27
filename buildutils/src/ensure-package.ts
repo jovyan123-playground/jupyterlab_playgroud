@@ -352,7 +352,7 @@ export async function ensurePackage(
   const schemas = glob.sync(
     path.join(pkgPath, schemaDir || 'schema', '*.json')
   );
-  if (schemaDir && !schemas.length) {
+  if (schemaDir && !schemas.length && pkgPath.indexOf('examples') == -1) {
     messages.push(`No schemas found in ${path.join(pkgPath, schemaDir)}.`);
   } else if (!schemaDir && schemas.length) {
     messages.push(`Schemas found, but no schema indicated in ${pkgPath}`);

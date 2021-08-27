@@ -264,7 +264,7 @@ program
   .option('--port <port>', 'Port to use for the registry')
   .option('--path <path>', 'Path to use for the registry')
   .action(async (options: any) => {
-    utils.exitOUuncaughtException();
+    utils.exitOnUuncaughtException();
     const out_dir = options.path || DEFAULT_OUT_DIR;
     await startLocalRegistry(out_dir, options.port || DEFAULT_PORT);
   });
@@ -273,7 +273,7 @@ program
   .command('stop')
   .option('--path <path>', 'Path to use for the registry')
   .action(async (options: any) => {
-    utils.exitOUuncaughtException();
+    utils.exitOnUuncaughtException();
     const out_dir = options.path || DEFAULT_OUT_DIR;
     await stopLocalRegistry(out_dir);
   });
@@ -282,7 +282,7 @@ program
   .command('fix-links')
   .option('--path <path>', 'Path to the directory with a yarn lock')
   .action((options: any) => {
-    utils.exitOUuncaughtException();
+    utils.exitOnUuncaughtException();
     fixLinks(options.path || process.cwd());
   });
 
@@ -290,7 +290,7 @@ program
   .command('publish-dists')
   .option('--path <path>', 'Path to the directory with npm tar balls')
   .action((options: any) => {
-    utils.exitOUuncaughtException();
+    utils.exitOnUuncaughtException();
     publishPackages(options.path || process.cwd());
   });
 

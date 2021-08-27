@@ -176,6 +176,8 @@
   "jupyterlab": {
     "buildDir": "./build",
     "outputDir": "./static",
+    "themeDir": "../data",
+    "schemaDir": "../data",
     "singletonPackages": [
       "@jupyterlab/application",
       "@jupyterlab/apputils",
