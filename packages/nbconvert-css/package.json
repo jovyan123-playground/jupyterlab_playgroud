@@ -13,10 +13,10 @@
   "license": "BSD-3-Clause",
   "author": "Project Jupyter",
   "sideEffects": [
-    "style/*.css"
+    "style/*.css",
+    "style/index.js"
   ],
   "main": "style/index.js",
-  "style": "style/index.css",
   "directories": {
     "style": "style/"
   },
@@ -26,8 +26,8 @@
   ],
   "scripts": {
     "build": "webpack --mode=production",
+    "build:all": "npm run build",
     "clean": "rimraf style/",
-    "prepublishOnly": "npm run build",
     "watch": "webpack --watch"
   },
   "dependencies": {
