@@ -673,30 +673,47 @@ class _AppHandler(object):
         # Set up the build directory.
         app_dir = self.app_dir
 
+        with subprocess.Popen(
+            ["jlpm", "config", "get", "cacheFolder"],
+            bufsize=1,
+            cwd=REPO_ROOT,
+            stdout=subprocess.PIPE,
+            universal_newlines=True
+        ) as p:
+            cache_folder = ''.join(line for line in p.stdout)
+            print("cache_folder: {}".format(cache_folder))
+
         self._populate_staging(
             name=name, version=version, static_url=static_url,
-            clean=clean_staging
+            cache_folder=cache_folder, clean=clean_staging
         )
 
         staging = pjoin(app_dir, 'staging')
 
         # Make sure packages are installed.
-        import subprocess as sproc
-
-        with sproc.Popen(
+        with subprocess.Popen(
             ["jlpm", "config"],
             bufsize=1,
-            cwd=staging,
-            stdout=sproc.PIPE,
+            cwd=REPO_ROOT,
+            stdout=subprocess.PIPE,
             universal_newlines=True
         ) as p:
             for line in p.stdout:
                 print(line, end='', flush=True)
-        with sproc.Popen(
+        with subprocess.Popen(
+            ["jlpm", "config"],
+            bufsize=1,
+            cwd=staging,
+            stdout=subprocess.PIPE,
+            universal_newlines=True
+        ) as p:
+            for line in p.stdout:
+                print(line, end='', flush=True)
+        with subprocess.Popen(
             ["jlpm", "install"],
             bufsize=1,
             cwd=staging,
-            stdout=sproc.PIPE,
+            stdout=subprocess.PIPE,
             universal_newlines=True
         ) as p:
             for line in p.stdout:
@@ -1183,7 +1200,7 @@ class _AppHandler(object):
         info['disabled_core'] = disabled_core
 
     def _populate_staging(self, name=None, version=None, static_url=None,
-                          clean=False):
+                          cache_folder=None, clean=False):
         """Set up the assets in the staging directory.
         """
         app_dir = self.app_dir
@@ -1224,6 +1241,9 @@ class _AppHandler(object):
         for fname in ['.yarnrc.yml', 'yarn.js']:
             target = pjoin(staging, fname)
             shutil.copy(pjoin(HERE, 'staging', fname), target)
+
+        with open(pjoin(staging, '.yarnrc.yml'), 'a') as yconf:
+            yconf.write("networkConcurrency: 4\n")
 
         # Ensure a clean templates directory
         templates = pjoin(staging, 'templates')
@@ -1328,6 +1348,10 @@ class _AppHandler(object):
         elif not osp.exists(lock_path):
             shutil.copy(lock_template, lock_path)
             os.chmod(lock_path, stat.S_IWRITE | stat.S_IREAD)
+
+        # if cache_folder is not None:
+        #     # copy old yarn cache
+        #     shutil.copytree(cache_folder, staging)
 
     def _get_package_template(self, silent=False):
         """Get the template the for staging package.json file.
