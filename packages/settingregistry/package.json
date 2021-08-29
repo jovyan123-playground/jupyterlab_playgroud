@@ -45,9 +45,9 @@
   },
   "devDependencies": {
     "@jupyterlab/testutils": "^3.3.0-alpha.6",
-    "@types/jest": "^26.0.10",
+    "@types/jest": "^27.0.1",
     "@types/json5": "^0.0.30",
-    "jest": "^26.4.2",
+    "jest": "^27.1.0",
     "rimraf": "~3.0.0",
     "ts-jest": "^26.3.0",
     "typescript": "~4.1.3"

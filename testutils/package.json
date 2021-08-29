@@ -53,7 +53,7 @@
     "child_process": "~1.0.2",
     "fs-extra": "^9.0.1",
     "identity-obj-proxy": "^3.0.0",
-    "jest": "^26.4.2",
+    "jest": "^27.1.0",
     "jest-junit": "^11.1.0",
     "jest-raw-loader": "^1.0.1",
     "jest-summary-reporter": "^0.0.2",
@@ -64,7 +64,7 @@
     "ts-jest": "^26.3.0"
   },
   "devDependencies": {
-    "@types/jest": "^26.0.10",
+    "@types/jest": "^27.0.1",
     "@types/node-fetch": "^2.5.4",
     "jest-retries": "^1.0.1",
     "lighthouse": "6.3.0",
