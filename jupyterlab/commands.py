@@ -1244,7 +1244,7 @@ class _AppHandler(object):
 
         with open(pjoin(staging, '.yarnrc.yml'), 'a') as yconf:
             yconf.write("cacheFolder: {}\n".format(cache_folder))
-            yconf.write("networkConcurrency: 4\n")
+            yconf.write("networkConcurrency: 1\n")
 
         # Ensure a clean templates directory
         templates = pjoin(staging, 'templates')
