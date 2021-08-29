@@ -710,6 +710,15 @@ class _AppHandler(object):
             for line in p.stdout:
                 print(line, end='', flush=True)
         with subprocess.Popen(
+            ["jlpm", "cache", "clean", "--all"],
+            bufsize=1,
+            cwd=staging,
+            stdout=subprocess.PIPE,
+            universal_newlines=True
+        ) as p:
+            for line in p.stdout:
+                print(line, end='', flush=True)
+        with subprocess.Popen(
             ["jlpm", "install"],
             bufsize=1,
             cwd=staging,
@@ -718,6 +727,7 @@ class _AppHandler(object):
         ) as p:
             for line in p.stdout:
                 print(line, end='', flush=True)
+
         ret = self._run(['jlpm', 'install'], cwd=staging)
         if ret != 0:
             msg = 'npm dependencies failed to install'

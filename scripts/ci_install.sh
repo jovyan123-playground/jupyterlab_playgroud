@@ -21,6 +21,9 @@ pip --version
 # Show a verbose install if the install fails, for debugging
 pip install -e ".[test]" || pip install -v -e ".[test]"
 
+jlpm cache clean --all
+jlpm install
+
 # next two lines equivalent to deprecated `yarn versions` cmd from yarn@1.x
 jlpm --version
 jlpm node -p process.versions
