@@ -680,8 +680,8 @@ class _AppHandler(object):
             stdout=subprocess.PIPE,
             universal_newlines=True
         ) as p:
-            cache_folder = ''.join(line for line in p.stdout)
-            print("cache_folder: {}".format(cache_folder))
+            cache_folder = ''.join(line for line in p.stdout).strip()
+            print("cache_folder: {}".format(cache_folder), flush=True)
 
         self._populate_staging(
             name=name, version=version, static_url=static_url,
@@ -1243,6 +1243,7 @@ class _AppHandler(object):
             shutil.copy(pjoin(HERE, 'staging', fname), target)
 
         with open(pjoin(staging, '.yarnrc.yml'), 'a') as yconf:
+            yconf.write("cacheFolder: {}\n".format(cache_folder))
             yconf.write("networkConcurrency: 4\n")
 
         # Ensure a clean templates directory
