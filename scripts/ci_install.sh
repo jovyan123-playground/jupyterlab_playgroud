@@ -22,7 +22,7 @@ pip --version
 pip install -e ".[test]" || pip install -v -e ".[test]"
 
 jlpm cache clean --all
-jlpm install
+jlpm
 
 # next two lines equivalent to deprecated `yarn versions` cmd from yarn@1.x
 jlpm --version
