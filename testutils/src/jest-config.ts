@@ -14,6 +14,7 @@ module.exports = function (baseDir: string) {
       '^.+\\.md?$': 'markdown-loader-jest'
     },
     testTimeout: 10000,
+    testEnvironment: 'jsdom',
     setupFiles: ['@jupyterlab/testutils/lib/jest-shim.js'],
     testPathIgnorePatterns: ['/lib/', '/node_modules/'],
     moduleFileExtensions: [

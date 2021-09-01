@@ -34,9 +34,10 @@
     "verdaccio.yml"
   ],
   "scripts": {
-    "build": "tsc",
-    "clean": "rimraf lib && rimraf tsconfig.tsbuildinfo",
-    "watch": "tsc -w --listEmittedFiles"
+    "build": "yarn run tsc",
+    "build:all": "yarn run build",
+    "clean": "yarn run rimraf lib && yarn run rimraf tsconfig.tsbuildinfo",
+    "watch": "yarn run tsc -w --listEmittedFiles"
   },
   "dependencies": {
     "@lumino/coreutils": "^1.5.3",
@@ -47,7 +48,7 @@
     "dependency-graph": "^0.9.0",
     "fs-extra": "^9.0.1",
     "glob": "~7.1.6",
-    "inquirer": "^7.0.0",
+    "inquirer": "^7.1.0",
     "minimatch": "~3.0.4",
     "os": "~0.1.1",
     "package-json": "^6.5.0",

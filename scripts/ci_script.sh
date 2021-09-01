@@ -12,7 +12,10 @@ fi
 
 
 if [[ $GROUP == python ]]; then
-    jupyter lab build --debug
+    export JUPYTERLAB_DIR="${HOME}/share/jupyter/lab/"
+    mkdir -p $JUPYTERLAB_DIR
+
+    jupyter lab build --debug --minimize=False
     # Run the python tests
     py.test
 fi
@@ -52,9 +55,6 @@ fi
 if [[ $GROUP == integrity ]]; then
     # Run the integrity script first
     jlpm run integrity --force
-
-    # Check yarn.lock file
-    jlpm check --integrity
 
     # Run a browser check in dev mode
     jlpm run build

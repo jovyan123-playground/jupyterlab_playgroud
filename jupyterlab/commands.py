@@ -663,7 +663,7 @@ class _AppHandler(object):
         # If splicing, make sure the source packages are built
         if self._options.splice_source:
             ensure_node_modules(REPO_ROOT, logger=self.logger)
-            self._run(['node', YARN_PATH, 'build:packages'], cwd=REPO_ROOT)
+            self._run(['jlpm', 'run', 'build:packages'], cwd=REPO_ROOT)
 
         info = ['production' if production else 'development']
         if production:
@@ -673,24 +673,71 @@ class _AppHandler(object):
         # Set up the build directory.
         app_dir = self.app_dir
 
+        with subprocess.Popen(
+            ["jlpm", "config", "get", "cacheFolder"],
+            bufsize=1,
+            cwd=REPO_ROOT,
+            stdout=subprocess.PIPE,
+            universal_newlines=True
+        ) as p:
+            cache_folder = ''.join(line for line in p.stdout).strip()
+            print("cache_folder: {}".format(cache_folder), flush=True)
+
         self._populate_staging(
             name=name, version=version, static_url=static_url,
-            clean=clean_staging
+            cache_folder=cache_folder, clean=clean_staging
         )
 
         staging = pjoin(app_dir, 'staging')
 
         # Make sure packages are installed.
-        ret = self._run(['node', YARN_PATH, 'install', '--non-interactive'], cwd=staging)
+        with subprocess.Popen(
+            ["jlpm", "config"],
+            bufsize=1,
+            cwd=REPO_ROOT,
+            stdout=subprocess.PIPE,
+            universal_newlines=True
+        ) as p:
+            for line in p.stdout:
+                print(line, end='', flush=True)
+        with subprocess.Popen(
+            ["jlpm", "config"],
+            bufsize=1,
+            cwd=staging,
+            stdout=subprocess.PIPE,
+            universal_newlines=True
+        ) as p:
+            for line in p.stdout:
+                print(line, end='', flush=True)
+        with subprocess.Popen(
+            ["jlpm", "cache", "clean", "--all"],
+            bufsize=1,
+            cwd=staging,
+            stdout=subprocess.PIPE,
+            universal_newlines=True
+        ) as p:
+            for line in p.stdout:
+                print(line, end='', flush=True)
+        with subprocess.Popen(
+            ["jlpm", "install"],
+            bufsize=1,
+            cwd=staging,
+            stdout=subprocess.PIPE,
+            universal_newlines=True
+        ) as p:
+            for line in p.stdout:
+                print(line, end='', flush=True)
+
+        ret = self._run(['jlpm', 'install'], cwd=staging)
         if ret != 0:
             msg = 'npm dependencies failed to install'
             self.logger.debug(msg)
             raise RuntimeError(msg)
 
         # Build the app.
-        dedupe_yarn(staging, self.logger)
+        # dedupe_yarn(staging, self.logger)
         command = f'build:{"prod" if production else "dev"}{":minimize" if minimize else ""}'
-        ret = self._run(['node', YARN_PATH, 'run', command], cwd=staging)
+        ret = self._run(['jlpm', 'run', command], cwd=staging)
         if ret != 0:
             msg = 'JupyterLab failed to build'
             self.logger.debug(msg)
@@ -1163,7 +1210,7 @@ class _AppHandler(object):
         info['disabled_core'] = disabled_core
 
     def _populate_staging(self, name=None, version=None, static_url=None,
-                          clean=False):
+                          cache_folder=None, clean=False):
         """Set up the assets in the staging directory.
         """
         app_dir = self.app_dir
@@ -1201,9 +1248,13 @@ class _AppHandler(object):
             target = pjoin(staging, fname)
             shutil.copy(pjoin(source_dir, fname), target)
 
-        for fname in ['.yarnrc', 'yarn.js']:
+        for fname in ['.yarnrc.yml', 'yarn.js']:
             target = pjoin(staging, fname)
             shutil.copy(pjoin(HERE, 'staging', fname), target)
+
+        with open(pjoin(staging, '.yarnrc.yml'), 'a') as yconf:
+            yconf.write("cacheFolder: {}\n".format(cache_folder))
+            yconf.write("networkConcurrency: 1\n")
 
         # Ensure a clean templates directory
         templates = pjoin(staging, 'templates')
@@ -1308,6 +1359,10 @@ class _AppHandler(object):
         elif not osp.exists(lock_path):
             shutil.copy(lock_template, lock_path)
             os.chmod(lock_path, stat.S_IWRITE | stat.S_IREAD)
+
+        # if cache_folder is not None:
+        #     # copy old yarn cache
+        #     shutil.copytree(cache_folder, staging)
 
     def _get_package_template(self, silent=False):
         """Get the template the for staging package.json file.
@@ -1965,7 +2020,7 @@ def _yarn_config(logger):
         return configuration
 
     try:
-        output_binary = subprocess.check_output([node, YARN_PATH, 'config', 'list', '--json'], stderr=subprocess.PIPE, cwd=HERE)
+        output_binary = subprocess.check_output([node, YARN_PATH, 'config', '--json'], stderr=subprocess.PIPE, cwd=HERE)
         output = output_binary.decode('utf-8')
         lines = iter(output.splitlines())
         try:

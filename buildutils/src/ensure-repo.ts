@@ -43,6 +43,7 @@ const MISSING: Dict<string[]> = {
   '@jupyterlab/coreutils': ['path'],
   '@jupyterlab/buildutils': ['path', 'webpack'],
   '@jupyterlab/builder': ['path'],
+  '@jupyterlab/galata': ['fs', 'path'],
   '@jupyterlab/testutils': ['fs', 'path'],
   '@jupyterlab/vega5-extension': ['vega-embed']
 };
@@ -85,6 +86,7 @@ const UNUSED: Dict<string[]> = {
   ],
   '@jupyterlab/buildutils': ['verdaccio'],
   '@jupyterlab/coreutils': ['path-browserify'],
+  '@jupyterlab/galata': ['node-fetch', 'http-server'],
   '@jupyterlab/services': ['node-fetch', 'ws'],
   '@jupyterlab/rendermime': ['@jupyterlab/mathjax2'],
   '@jupyterlab/testutils': [
@@ -384,6 +386,9 @@ function ensureMetaPackage(): string[] {
       delete mpData.dependencies[name];
     }
   });
+
+  // Add to build:all target
+  mpData.scripts['build:all'] = 'yarn run build';
 
   // Write the files.
   if (messages.length > 0) {
@@ -746,7 +751,7 @@ export async function ensureIntegrity(): Promise<boolean> {
       );
       process.exit(1);
     }
-    utils.run('jlpm install');
+    utils.run('jlpm');
     console.debug('\n\nMade integrity changes!');
     console.debug('Please commit the changes by running:');
     console.debug('git commit -a -m "Package integrity updates"');
