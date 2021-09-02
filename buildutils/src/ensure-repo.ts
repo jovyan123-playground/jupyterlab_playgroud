@@ -739,19 +739,22 @@ export async function ensureIntegrity(): Promise<boolean> {
   // Handle the pyproject.toml package
   const pyprojectPath = path.resolve('.', 'pyproject.toml');
   const curr = utils.getPythonVersion();
-  let tag = "latest";
+  let tag = 'latest';
   if (!/\d+\.\d+\.\d+$/.test(curr)) {
-    tag = "next";
+    tag = 'next';
   }
   const publishCommand = `npm publish --tag ${tag}`;
-  let pyprojectText = fs.readFileSync(pyprojectPath, {encoding: 'utf8'});
+  let pyprojectText = fs.readFileSync(pyprojectPath, { encoding: 'utf8' });
   if (pyprojectText.indexOf(publishCommand) === -1) {
-    pyprojectText = pyprojectText.replace(/npm publish --tag [a-z]+/, publishCommand);
-    fs.writeFileSync(pyprojectPath, pyprojectText, {encoding: 'utf8'});
+    pyprojectText = pyprojectText.replace(
+      /npm publish --tag [a-z]+/,
+      publishCommand
+    );
+    fs.writeFileSync(pyprojectPath, pyprojectText, { encoding: 'utf8' });
     if (!messages['top']) {
       messages['top'] = [];
     }
-    messages['top'].push("Update npm publish command in pyproject.toml");
+    messages['top'].push('Update npm publish command in pyproject.toml');
   }
 
   // Handle the JupyterLab application top package.

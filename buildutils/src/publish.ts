@@ -67,9 +67,9 @@ commander
         cmd += '  --yes ';
       }
 
-      let tag = "latest";
+      let tag = 'latest';
       if (!/\d+\.\d+\.\d+$/.test(curr)) {
-        tag = "next";
+        tag = 'next';
       }
       utils.run(`${cmd} --dist-tag=${tag} -m "Publish"`);
     }
