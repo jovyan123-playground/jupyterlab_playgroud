@@ -40,7 +40,6 @@
     "watch": "tsc -w --listEmittedFiles"
   },
   "dependencies": {
-    "@iarna/toml": "^2.2.5",
     "@lumino/coreutils": "^1.5.3",
     "@yarnpkg/lockfile": "^1.1.0",
     "child_process": "~1.0.2",

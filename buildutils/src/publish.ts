@@ -66,19 +66,9 @@ commander
       if (options.yes) {
         cmd += '  --yes ';
       }
-      // Use @iarna/toml to parse pyproject.toml in ensure-repository
-      // const TOML = require('@iarna/toml')
-      // var data = fs.readFileSync('../pyproject.toml', { encoding: 'utf8'} )
-      // const parsed = TOML.parse(data);
-      // parsed.tool['jupyter-releaser'].options['npm-cmd'] = 'npm publish --tag latest'
-      // if changed, write to disk and add integrity message
-      // TOML.stringify(parsed)
 
-      // TODO add a utils.isPreRelease that uses semver on the root package
-      // version
-
-      // TODO: this current check doesn't take into account beta releases
-      if (curr.indexOf('rc') === -1 && curr.indexOf('a') === -1) {
+      // TODO: get the dist-tag from the top level package.json
+      if (/\d+\.\d+\.\d+$/.test(curr)) {
         utils.run(`${cmd} -m "Publish"`);
       } else {
         utils.run(`${cmd} --dist-tag=next -m "Publish"`);
