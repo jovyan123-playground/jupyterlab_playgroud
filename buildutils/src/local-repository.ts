@@ -251,9 +251,12 @@ function fixLinks(package_dir: string) {
  */
 function publishPackages(dist_dir: string) {
   const paths = glob.sync(path.join(dist_dir, '*.tgz'));
+  // TODO: whether top level package is prerelease (semver.prerelease(i))
+  // make this a utility function so we can use it in publish.ts
   paths.forEach(package_path => {
     const filename = path.basename(package_path);
-    utils.run(`npm publish ${filename}`, { cwd: dist_dir });
+    const tag = 'hi';
+    utils.run(`npm publish ${filename} --tag ${tag}`, { cwd: dist_dir });
   });
 }
 
