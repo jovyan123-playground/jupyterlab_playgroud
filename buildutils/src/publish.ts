@@ -67,12 +67,11 @@ commander
         cmd += '  --yes ';
       }
 
-      // TODO: get the dist-tag from the top level package.json
-      if (/\d+\.\d+\.\d+$/.test(curr)) {
-        utils.run(`${cmd} -m "Publish"`);
-      } else {
-        utils.run(`${cmd} --dist-tag=next -m "Publish"`);
+      let tag = "latest";
+      if (!/\d+\.\d+\.\d+$/.test(curr)) {
+        tag = "next";
       }
+      utils.run(`${cmd} --dist-tag=${tag} -m "Publish"`);
     }
 
     // Fix up any tagging issues.

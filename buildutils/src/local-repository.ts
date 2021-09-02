@@ -251,13 +251,13 @@ function fixLinks(package_dir: string) {
  */
 function publishPackages(dist_dir: string) {
   const paths = glob.sync(path.join(dist_dir, '*.tgz'));
-  // TODO: the target tag should be part of package.json and handled in
-  // ensure-repo.ts - part of config
-  // Don't use toml parser, just look for `npm publish --tag {old}` and replace with `npm publish --tag {new}` if needed.   Keeps things simple
-
+  const curr = utils.getPythonVersion();
+  let tag = 'latest';
+  if (!/\d+\.\d+\.\d+$/.test(curr)) {
+    tag = 'next';
+  }
   paths.forEach(package_path => {
     const filename = path.basename(package_path);
-    const tag = 'hi';
     utils.run(`npm publish ${filename} --tag ${tag}`, { cwd: dist_dir, stdio: 'pipe' });
   });
 }
