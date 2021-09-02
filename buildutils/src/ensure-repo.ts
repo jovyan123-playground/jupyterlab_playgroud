@@ -737,17 +737,16 @@ export async function ensureIntegrity(): Promise<boolean> {
   ensureBuildUtils();
 
   // Handle the pyproject.toml package
-  const pyprojectPath = path.resolve('.', 'pyproject.toml')
+  const pyprojectPath = path.resolve('.', 'pyproject.toml');
   const curr = utils.getPythonVersion();
   let tag = "latest";
   if (!/\d+\.\d+\.\d+$/.test(curr)) {
     tag = "next";
   }
-  tag = "test";
   const publishCommand = `npm publish --tag ${tag}`;
   let pyprojectText = fs.readFileSync(pyprojectPath, {encoding: 'utf8'});
-  if (pyprojectText.indexOf(publishCommand) !== -1) {
-    pyprojectText = pyprojectText.replace(/npm publish --tag \S+/, publishCommand);
+  if (pyprojectText.indexOf(publishCommand) === -1) {
+    pyprojectText = pyprojectText.replace(/npm publish --tag [a-z]+/, publishCommand);
     fs.writeFileSync(pyprojectPath, pyprojectText, {encoding: 'utf8'});
     if (!messages['top']) {
       messages['top'] = [];
