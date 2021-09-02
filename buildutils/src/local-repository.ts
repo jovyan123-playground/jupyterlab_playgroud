@@ -256,7 +256,7 @@ function publishPackages(dist_dir: string) {
   paths.forEach(package_path => {
     const filename = path.basename(package_path);
     const tag = 'hi';
-    utils.run(`npm publish ${filename} --tag ${tag}`, { cwd: dist_dir });
+    utils.run(`npm publish ${filename} --tag ${tag}`, { cwd: dist_dir, stdio: 'pipe' });
   });
 }
 
