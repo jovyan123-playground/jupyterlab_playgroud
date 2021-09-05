@@ -2,6 +2,7 @@
 .dockerignore
 Dockerfile
 
+foo
 # project files
 coverage/
 
