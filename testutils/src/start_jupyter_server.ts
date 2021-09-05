@@ -116,7 +116,6 @@ export class JupyterServer {
   }
 }
 
-
 /**
  * A namespace for JupyterServer static values.
  */
@@ -128,7 +127,7 @@ export namespace JupyterServer {
     /**
      * Additional Page Config values.
      */
-    pageConfig: { [name: string] : string};
+    pageConfig: { [name: string]: string };
     /**
      * Additional traitlet config data.
      */
@@ -136,7 +135,7 @@ export namespace JupyterServer {
     /**
      * Map of additional kernelspec names to kernel.json dictionaries
      */
-    additionalKernelSpecs: JSONObject
+    additionalKernelSpecs: JSONObject;
   }
 }
 
@@ -227,7 +226,9 @@ namespace Private {
   /**
    * Handle configuration.
    */
-  export function handleConfig(options: Partial<JupyterServer.IOptions>): string {
+  export function handleConfig(
+    options: Partial<JupyterServer.IOptions>
+  ): string {
     // Set up configuration.
     const token = UUID.uuid4();
     PageConfig.setOption('token', token);
@@ -236,7 +237,7 @@ namespace Private {
     if (options.pageConfig) {
       Object.keys(options.pageConfig).forEach(key => {
         PageConfig.setOption(key, options.pageConfig![key]);
-      })
+      });
     }
 
     const configDir = mktempDir('config');
@@ -247,26 +248,29 @@ namespace Private {
     const user_settings_dir = mktempDir('settings');
     const workspaces_dir = mktempDir('workspaces');
 
-    const configData = merge({
-      LabApp: {
-        user_settings_dir,
-        workspaces_dir,
-        app_dir,
-        open_browser: false,
-        log_level: 'DEBUG'
+    const configData = merge(
+      {
+        LabApp: {
+          user_settings_dir,
+          workspaces_dir,
+          app_dir,
+          open_browser: false,
+          log_level: 'DEBUG'
+        },
+        ServerApp: {
+          token,
+          root_dir,
+          log_level: 'DEBUG'
+        },
+        MultiKernelManager: {
+          default_kernel_name: 'echo'
+        },
+        KernelManager: {
+          shutdown_wait_time: 1.0
+        }
       },
-      ServerApp: {
-        token,
-        root_dir,
-        log_level: 'DEBUG'
-      },
-      MultiKernelManager: {
-        default_kernel_name: 'echo'
-      },
-      KernelManager: {
-        shutdown_wait_time: 1.0
-      }
-    }, options.configData || {});
+      options.configData || {}
+    );
     fs.writeFileSync(configPath, JSON.stringify(configData));
     return configDir;
   }
