@@ -93,7 +93,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: ~/.cache/eslint
-          key: ${{ runner.os }}-eslint-${{ steps.get-date.outputs.date }}
+          key: ${{ runner.os }}-eslint-${{ steps.get-date.outputs.date }}-2
 
       - name: Install dependencies
         env:
