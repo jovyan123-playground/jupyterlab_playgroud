@@ -64,8 +64,9 @@ fi
 
 if [[ $GROUP == lint ]]; then
     # Lint our files.
-    jlpm run lint:check || (echo 'Please run `jlpm run lint` locally and push changes' && exit 1)
-    jlpm run eslint:check:typed || (echo echo 'Please run `jlpm run eslint:typed` locally and push changes' && exit 1)
+    jlpm run prettier:check || (echo 'Please run `jlpm run prettier` locally and push changes' && exit 1)
+    jlpm run eslint:check --cache-location ~/.cache/eslint || (echo 'Please run `jlpm run eslint` locally and push changes' && exit 1)
+    jlpm run eslint:check:typed --cache-location ~/.cache/eslint || (echo echo 'Please run `jlpm run eslint:typed` locally and push changes' && exit 1)
 fi
 
 
