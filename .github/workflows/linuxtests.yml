@@ -89,6 +89,7 @@ jobs:
         shell: bash
 
       - name: Cache eslint
+        if: ${{ matrix.group == 'lint' }}
         uses: actions/cache@v2
         with:
           path: ~/.cache/eslint
