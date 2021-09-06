@@ -166,6 +166,7 @@ namespace Private {
     const specDir = path.join(dataDir, 'kernels', name);
     fs.mkdirSync(specDir, { recursive: true });
     fs.writeFileSync(path.join(specDir, 'kernel.json'), JSON.stringify(spec));
+    PageConfig.setOption(`__kernelSpec_${name}`, JSON.stringify(spec));
   }
 
   /**
@@ -271,6 +272,7 @@ namespace Private {
       },
       options.configData || {}
     );
+    PageConfig.setOption('__configData', JSON.stringify(configData));
     fs.writeFileSync(configPath, JSON.stringify(configData));
     return configDir;
   }
