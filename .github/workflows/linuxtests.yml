@@ -82,11 +82,17 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-yarn-
 
+      - name: Get Date
+        id: get-date
+        run: |
+          echo "::set-output name=date::$(/bin/date -u "+%Y%m%d")"
+        shell: bash
+
       - name: Cache eslint
         uses: actions/cache@v2
         with:
           path: ~/.cache/eslint
-          key: ${{ runner.os }}-eslint
+          key: ${{ runner.os }}-eslint-${{ steps.get-date.outputs.date }}
 
       - name: Install dependencies
         env:
