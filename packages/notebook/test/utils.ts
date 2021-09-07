@@ -18,7 +18,7 @@ import {
  * Create a default notebook content factory.
  */
 export function createNotebookFactory(): Notebook.IContentFactory {
-  return NBTestUtils.createNotebookFactory(Notebook);
+  return NBTestUtils.createNotebookFactory();
 }
 
 /**
