@@ -20,6 +20,8 @@ fi
 
 if [[ $GROUP == js* ]]; then
 
+    jlpm run build:all
+
     if [[ $GROUP == "js-testutils" ]]; then
         pushd testutils
     else
