@@ -8,7 +8,7 @@ import {
   Notebook,
   NotebookPanel,
   NotebookWidgetFactory
-} from '../src';
+} from '..';
 
 /**
  * Local versions of the NBTestUtils that import from `src` instead of `lib`.
@@ -18,7 +18,7 @@ import {
  * Create a default notebook content factory.
  */
 export function createNotebookFactory(): Notebook.IContentFactory {
-  return NBTestUtils.createNotebookFactory();
+  return NBTestUtils.createNotebookFactory(Notebook);
 }
 
 /**
