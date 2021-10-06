@@ -6,8 +6,6 @@
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 
 import * as webpack from 'webpack';
-const merge = require('webpack-merge').default;
-const baseConfig = require('./webpack.config.base');
 import * as fs from 'fs-extra';
 import * as glob from 'glob';
 import * as path from 'path';
@@ -192,45 +190,42 @@ export namespace Build {
       if (!themePath) {
         return;
       }
-      themeConfig.push(
-        merge(baseConfig, {
-          mode: 'production',
-          entry: {
-            index: path.join(packageDir, themePath)
-          },
-          output: {
-            path: path.resolve(path.join(themeOutput, 'themes', name)),
-            // we won't use these JS files, only the extracted CSS
-            filename: '[name].js'
-          },
-          module: {
-            rules: [
-              {
-                test: /\.css$/,
-                use: [MiniCssExtractPlugin.loader, 'css-loader']
-              },
-              {
-                test: /\.svg/,
-                use: [
-                  { loader: 'svg-url-loader', options: { encoding: 'none' } }
-                ]
-              },
-              {
-                test: /\.(cur|png|jpg|gif|ttf|woff|woff2|eot)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
-                use: [{ loader: 'url-loader', options: { limit: 10000 } }]
-              }
-            ]
-          },
-          plugins: [
-            new MiniCssExtractPlugin({
-              // Options similar to the same options in webpackOptions.output
-              // both options are optional
-              filename: '[name].css',
-              chunkFilename: '[id].css'
-            })
+      themeConfig.push({
+        mode: 'production',
+        entry: {
+          index: path.join(packageDir, themePath)
+        },
+        output: {
+          path: path.resolve(path.join(themeOutput, 'themes', name)),
+          // we won't use these JS files, only the extracted CSS
+          filename: '[name].js',
+          hashFunction: 'sha256'
+        },
+        module: {
+          rules: [
+            {
+              test: /\.css$/,
+              use: [MiniCssExtractPlugin.loader, 'css-loader']
+            },
+            {
+              test: /\.svg/,
+              use: [{ loader: 'svg-url-loader', options: { encoding: 'none' } }]
+            },
+            {
+              test: /\.(cur|png|jpg|gif|ttf|woff|woff2|eot)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+              use: [{ loader: 'url-loader', options: { limit: 10000 } }]
+            }
           ]
-        })
-      );
+        },
+        plugins: [
+          new MiniCssExtractPlugin({
+            // Options similar to the same options in webpackOptions.output
+            // both options are optional
+            filename: '[name].css',
+            chunkFilename: '[id].css'
+          })
+        ]
+      });
     });
 
     cssImports.sort((a, b) => a.localeCompare(b));
