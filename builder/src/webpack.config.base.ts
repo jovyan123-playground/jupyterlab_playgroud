@@ -5,7 +5,7 @@ import * as path from 'path';
 import * as webpack from 'webpack';
 import crypto from "crypto";
 
-// Workaround for loaders using "md4" by default, which is no longer supported
+// Workaround for loaders using "md4" by default, which is no longer supported in OpenSSL
 // https://github.com/webpack/webpack/issues/13572#issuecomment-923736472
 const cryptoOrigCreateHash = crypto.createHash;
 crypto.createHash = (algorithm: string) => cryptoOrigCreateHash(algorithm == "md4" ? "sha256" : algorithm);
