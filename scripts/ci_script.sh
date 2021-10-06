@@ -144,7 +144,7 @@ if [[ $GROUP == release_test ]]; then
     node buildutils/lib/local-repository.js start
     npm whoami
 
-    jlpm run publish:js
+    jlpm run publish:js --yes
     jlpm run prepare:python-release
     cat jupyterlab/staging/package.json
     ./scripts/release_test.sh
