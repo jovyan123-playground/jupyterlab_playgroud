@@ -136,17 +136,12 @@ fi
 
 
 if [[ $GROUP == release_check ]]; then
-    jlpm run publish:js --dry-run
-    jlpm run prepare:python-release
-    ./scripts/release_test.sh
-
-    # Prep for using verdaccio during publish
+    # Use verdaccio during publish
     node buildutils/lib/local-repository.js start
     npm whoami
-    pushd packages/application
-    npm version patch
-    npm publish
-    popd
+    jlpm run publish:js
+    jlpm run prepare:python-release
+    ./scripts/release_test.sh
     node buildutils/lib/local-repository.js stop
 fi
 
