@@ -33,6 +33,7 @@ jupyter serverextension list 1>serverextensions 2>&1
 cat serverextensions
 cat serverextensions | grep -i "jupyterlab.*enabled"
 cat serverextensions | grep -i "jupyterlab.*OK"
+rm serverextensions
 
 if [[ $GROUP == integrity ]]; then
     pip install notebook==4.3.1
