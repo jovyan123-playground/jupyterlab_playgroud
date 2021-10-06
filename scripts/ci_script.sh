@@ -139,10 +139,6 @@ if [[ $GROUP == release_test ]]; then
     # Use verdaccio during publish
     node buildutils/lib/local-repository.js start
     npm whoami
-    git checkout .
-    pip install bump2version
-    jlpm
-    jlpm run build:all
     jlpm run publish:js
     jlpm run prepare:python-release
     ./scripts/release_test.sh
