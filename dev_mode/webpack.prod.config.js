@@ -22,3 +22,4 @@ config[0] = merge(config[0], {
 });
 
 module.exports = config;
+console.log(module.exports)

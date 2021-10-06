@@ -338,3 +338,5 @@ if (watchNodeModules) {
 
 const logPath = path.join(buildDir, 'build_log.json');
 fs.writeFileSync(logPath, JSON.stringify(module.exports, null, '  '));
+
+console.log(module.exports)
