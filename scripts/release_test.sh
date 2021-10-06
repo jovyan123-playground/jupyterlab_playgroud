@@ -18,20 +18,15 @@ conda activate "$JLAB_TEST_ENV"
 python -m pip install $(ls dist/*.whl)
 
 cp examples/notebooks/*.ipynb $TEST_DIR/
+cp -r jupyterlab/tests/mock_packages $TEST_DIR
 
 pushd $TEST_DIR
 
 JLAB_BROWSER_CHECK_OUTPUT=${OUTPUT_DIR} python -m jupyterlab.browser_check
 
-popd
-
-pushd jupyterlab/tests/mock_packages
 jupyter labextension install mimeextension --no-build --debug
 jupyter labextension develop extension
 jupyter labextension build extension
-popd
-
-pushd $TEST_DIR
 
 conda install --override-channels --strict-channel-priority -c conda-forge -c nodefaults -y ipywidgets altair matplotlib-base vega_datasets jupyterlab_widgets
 
