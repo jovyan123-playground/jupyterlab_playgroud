@@ -139,6 +139,15 @@ if [[ $GROUP == release_test ]]; then
     # Use verdaccio during publish
     node buildutils/lib/local-repository.js start
     npm whoami
+
+    # bump version
+    git checkout .
+    pip install bump2version
+    jlpm bumpversion next --force
+    git commit -am '[ci skip] Bump version'
+    jlpm
+    jlpm run build:all
+
     jlpm run publish:js
     jlpm run prepare:python-release
     cat jupyterlab/staging/package.json
