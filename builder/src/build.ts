@@ -7,10 +7,10 @@ import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 
 import * as webpack from 'webpack';
 const merge = require('webpack-merge').default;
+const baseConfig = require('./webpack.config.base');
 import * as fs from 'fs-extra';
 import * as glob from 'glob';
 import * as path from 'path';
-import * as baseConfig from './webpack.config.base';
 import { readJSONFile } from '@jupyterlab/buildutils';
 
 /**
