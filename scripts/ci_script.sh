@@ -137,6 +137,7 @@ fi
 
 if [[ $GROUP == release_test ]]; then
     # bump the version
+    git checkout -b test HEAD
     jlpm bumpversion next --force
     git commit -am '[ci skip] Bump version'
     jlpm
