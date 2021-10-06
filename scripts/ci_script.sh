@@ -136,17 +136,16 @@ fi
 
 
 if [[ $GROUP == release_test ]]; then
-    # Use verdaccio during publish
-    node buildutils/lib/local-repository.js start
-    npm whoami
-
-    # bump version
-    git checkout .
+    # bump the version
     pip install bump2version
     jlpm bumpversion next --force
     git commit -am '[ci skip] Bump version'
     jlpm
     jlpm run build:all
+
+    # Use verdaccio during publish
+    node buildutils/lib/local-repository.js start
+    npm whoami
 
     jlpm run publish:js
     jlpm run prepare:python-release
