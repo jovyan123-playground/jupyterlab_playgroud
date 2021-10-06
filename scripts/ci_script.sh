@@ -135,7 +135,7 @@ if [[ $GROUP == integrity3 ]]; then
 fi
 
 
-if [[ $GROUP == release_check ]]; then
+if [[ $GROUP == release_test ]]; then
     # Use verdaccio during publish
     node buildutils/lib/local-repository.js start
     npm whoami

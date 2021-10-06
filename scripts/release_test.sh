@@ -22,11 +22,13 @@ cp -r jupyterlab/tests/mock_packages $TEST_DIR
 
 pushd $TEST_DIR
 
+ls -ltr
+
 JLAB_BROWSER_CHECK_OUTPUT=${OUTPUT_DIR} python -m jupyterlab.browser_check
 
-jupyter labextension install mimeextension --no-build --debug
-jupyter labextension develop extension
-jupyter labextension build extension
+jupyter labextension install ./mimeextension --no-build --debug
+jupyter labextension develop ./extension
+jupyter labextension build ./extension
 
 conda install --override-channels --strict-channel-priority -c conda-forge -c nodefaults -y ipywidgets altair matplotlib-base vega_datasets jupyterlab_widgets
 
