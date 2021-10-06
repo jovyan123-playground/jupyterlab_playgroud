@@ -6,9 +6,11 @@
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 
 import * as webpack from 'webpack';
+const merge = require('webpack-merge').default;
 import * as fs from 'fs-extra';
 import * as glob from 'glob';
 import * as path from 'path';
+import * as baseConfig from './webpack.config.base';
 import { readJSONFile } from '@jupyterlab/buildutils';
 
 /**
@@ -190,7 +192,7 @@ export namespace Build {
       if (!themePath) {
         return;
       }
-      themeConfig.push({
+      themeConfig.push(merge(baseConfig, {
         mode: 'production',
         entry: {
           index: path.join(packageDir, themePath)
@@ -224,7 +226,7 @@ export namespace Build {
             chunkFilename: '[id].css'
           })
         ]
-      });
+      }));
     });
 
     cssImports.sort((a, b) => a.localeCompare(b));
