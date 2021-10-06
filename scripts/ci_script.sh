@@ -138,6 +138,7 @@ fi
 if [[ $GROUP == release_test ]]; then
     # bump the version
     pip install bump2version
+    git status
     jlpm bumpversion next --force
     git commit -am '[ci skip] Bump version'
     jlpm
